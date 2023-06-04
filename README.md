@@ -5,15 +5,18 @@ O sistema deve dar suporte à gestão de clínica onde trabalha uma equipe de m�
 ## Instruções para o Trabalho Prático (TP)
 
 Cada grupo deve desenvolver um projeto de software sobre o tema alocado contendo:
-a. Um modelo de processo, incluindo: as atividades para desenvolvimento do projeto,
-responsáveis pelas atividades e um cronograma para execução das atividades.
-b. Um documento de especificação de requisitos, incluindo: Diagramas de Casos de
-Uso e descrição dos cenários de casos de uso.
-c. Um documento de projeto arquitetural, incluindo um Diagrama de Componentes.
-d. Um documento de projeto detalhado, incluindo: Diagramas de Classes, Diagramas
-de Sequência e outros dois tipos de diagramas definidos na UML.
-e. Implementação parcial do sistema em Java.
-f. Testes automatizados JUnit para a implementação parcial.
+
+<ol>
+<li>Um modelo de processo, incluindo: as atividades para desenvolvimento do projeto,
+responsáveis pelas atividades e um cronograma para execução das atividades.</li>
+<li>Um documento de especificação de requisitos, incluindo: Diagramas de Casos de
+Uso e descrição dos cenários de casos de uso.</li>
+<li>Um documento de projeto arquitetural, incluindo um Diagrama de Componentes.</li>
+<li>Um documento de projeto detalhado, incluindo: Diagramas de Classes, Diagramas
+de Sequência e outros dois tipos de diagramas definidos na UML.</li>
+<li>Implementação parcial do sistema em Java</li>
+<li>Testes automatizados JUnit para a implementação parcial.</li>
+</ol>
 
 ## Grupo
 
