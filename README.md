@@ -1,18 +1,26 @@
-## Getting Started
+## Sistema para gestão de clínica médica
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+O sistema deve dar suporte à gestão de clínica onde trabalha uma equipe de médicos. Será usado pelos recepcionistas para marcação de consultas e também pelos médicos, para registro do histórico dos pacientes. Deve ser controlada a recepção de resultados de exames que sejam enviados diretamente dos laboratórios para os médicos; por opção do médico, estes resultados podem ser entregues aos pacientes, ou guardados na clínica para consulta posterior. O médico pode também autorizar que os exames sejam disponibilizados online ao respectivo paciente; neste caso, o paciente usará uma chave única para visualizar o resultado de seus exames.
 
-## Folder Structure
+## Instruções para o Trabalho Prático (TP)
 
-The workspace contains two folders by default, where:
+Cada grupo deve desenvolver um projeto de software sobre o tema alocado contendo:
+a. Um modelo de processo, incluindo: as atividades para desenvolvimento do projeto,
+responsáveis pelas atividades e um cronograma para execução das atividades.
+b. Um documento de especificação de requisitos, incluindo: Diagramas de Casos de
+Uso e descrição dos cenários de casos de uso.
+c. Um documento de projeto arquitetural, incluindo um Diagrama de Componentes.
+d. Um documento de projeto detalhado, incluindo: Diagramas de Classes, Diagramas
+de Sequência e outros dois tipos de diagramas definidos na UML.
+e. Implementação parcial do sistema em Java.
+f. Testes automatizados JUnit para a implementação parcial.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+## Grupo
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/MerciaCaroline"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/26381378?v=4" width="100px;" alt=""/><br /><sub><b>Mércia Martins</b></sub></a><br />
+    <td align="center"><a href="https://github.com/marconefaria"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/62022318?v=4" width="100px;" alt=""/><br /><sub><b>Marcone Faria</b></sub></a><br />
+    <td align="center"><a href="https://github.com/enriqca"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/56132430?v=4" width="100px;" alt=""/><br /><sub><b>Henrique </b></sub></a><br />
+  </tr>
+</table>
