@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,40 +11,46 @@ import models.Paciente;
 import models.ResultadoExame;
 
 public class PacienteController {
-    private static Paciente _paciente;
+    private Paciente paciente;
+    private List<Consulta> consultas;
+    private List<ResultadoExame> resultadosExames;
 
     public PacienteController(Paciente paciente) {
-        _paciente = paciente;
+        this.paciente = paciente;
+        this.consultas = new ArrayList<>();
+        this.resultadosExames = new ArrayList<>();
     }
 
     public void marcarConsulta(Medico medico, Date data, String descricao) {
-        // Lógica para agendar a consulta
+        Consulta consulta = new Consulta(paciente, medico, data, descricao);
+        consultas.add(consulta);
     }
 
     public void receberResultadoExame(ResultadoExame resultadoExame) {
-        // Lógica para receber o resultado do exame
+        resultadosExames.add(resultadoExame);
     }
 
     public void cancelarConsulta(Consulta consulta) {
-        // Lógica para cancelar a consulta
+        consultas.remove(consulta);
     }
 
     public List<Consulta> consultarConsultas() {
-        // Lógica para consultar as consultas marcadas para o paciente
-        return null;
+        return consultas;
     }
 
     public List<ResultadoExame> consultarResultadosExames() {
-        // Lógica para consultar os resultados de exames do paciente
-        return null;
+        return resultadosExames;
     }
 
     public List<Exame> solicitarExames(List<String> tiposExame) {
+        List<Exame> examesSolicitados = new ArrayList<>();
         // Lógica para solicitar exames ao médico ou laboratório
-        return null;
+        // Criação dos objetos Exame e adição na lista examesSolicitados
+        return examesSolicitados;
     }
 
     public void autorizarExamesOnline() {
         // Lógica para autorizar que os resultados de exames sejam disponibilizados online
+        // Atualizar os atributos dos ResultadoExame correspondentes
     }
 }

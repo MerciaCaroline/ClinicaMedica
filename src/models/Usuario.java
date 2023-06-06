@@ -6,6 +6,12 @@ public class Usuario {
     protected String senha;
     protected String nome;
 
+    public Usuario(String usuario, String senha, String nome){
+        this.usuario = usuario;
+        this.senha = senha;
+        this.nome = nome;
+    }
+
     // Construtor, getters e setters
     public int getId() {
         return this.id;

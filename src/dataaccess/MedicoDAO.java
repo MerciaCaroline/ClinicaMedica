@@ -10,7 +10,7 @@ import java.util.List;
 import models.Medico;
 
 public class MedicoDAO {
-    private Connection connection;
+    private static Connection connection;
 
     public MedicoDAO(Connection connection) {
         this.connection = connection;
@@ -60,6 +60,30 @@ public class MedicoDAO {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
 
+                    String usuario = resultSet.getString("usuario");
+                    String senha = resultSet.getString("senha");
+                    String nome = resultSet.getString("nome");
+                    String especialidade = resultSet.getString("especialidade");
+                    String telefone = resultSet.getString("telefone");
+                    String registroCrm = resultSet.getString("registroCrm");
+
+                    medico = new Medico(id, usuario, senha, nome, especialidade, telefone, registroCrm);
+                }
+            }
+        }
+
+        return medico;
+    }
+
+    public static Medico buscarPorNome(String nome_buscar) throws SQLException {
+        String sql = "SELECT * FROM medico WHERE nome = ?";
+
+        Medico medico = null;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int id = resultSet.getInt("id");
                     String usuario = resultSet.getString("usuario");
                     String senha = resultSet.getString("senha");
                     String nome = resultSet.getString("nome");
