@@ -1,39 +1,23 @@
 package models;
 
-import java.util.Date;
-import java.util.List;
-
-public class Paciente {
-    private int id;
-    private String nome;
+public class Paciente extends Usuario{
     private String telefone;
     private String endereco;
 
+    public Paciente(int id, String nome, String telefone, String endereco) {
+        this.id = id;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.endereco = endereco;
+    }
+
     // Construtor, getters e setters
-    public int getId() {
-        return this.id;
-    }
-
-    public String getNome() {
-        return this.nome;
-    }
-
     public String getTelefone() {
         return this.telefone;
     }
 
     public String getEndereco() {
         return this.endereco;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setNome(String nome) {
-        if (nome.length() > 0) {
-            this.nome = nome;
-        }
     }
 
     public void setTelefone(String telefone) {
