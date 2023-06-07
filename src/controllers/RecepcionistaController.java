@@ -20,12 +20,12 @@ public class RecepcionistaController {
     }
     
     // Método para marcar uma consulta
-    public boolean marcarConsulta(int id, Paciente paciente, Medico medico, Date dataConsulta, String descricao) {
+    public boolean marcarConsulta(Paciente paciente, Medico medico, Date dataConsulta, String descricao) {
         // Lógica para marcar a consulta: 
         //verifica disponibilidade na agenda
         // insere na tabela de consultas
         //retorna true ou false
-        Consulta consulta = new Consulta(id, paciente, medico, dataConsulta, descricao);
+        Consulta consulta = new Consulta(paciente, medico, dataConsulta, descricao);
         pacientes.add(paciente);
         consultas.add(consulta);
 

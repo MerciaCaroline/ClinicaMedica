@@ -53,9 +53,6 @@ public class RecepcionistaView {
         Medico medico = new Medico();
         Paciente paciente = new Paciente();
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
-        
-        System.out.println("Digite o identificador da consulta: ");
-        int id = scanner.nextInt();
 
         System.out.println("Digite o nome do médico: ");
         medico.setNome(scanner.next());
@@ -69,7 +66,7 @@ public class RecepcionistaView {
         System.out.println("Digite o horário da consulta (no formato HH:mm): ");
         String horarioConsulta = scanner.next();
 
-        boolean sucesso = controller.marcarConsulta(id, paciente, medico, dataConsulta, horarioConsulta);
+        boolean sucesso = controller.marcarConsulta(paciente, medico, dataConsulta, horarioConsulta);
 
         if (sucesso) {
             System.out.println("Consulta marcada com sucesso!");

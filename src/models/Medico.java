@@ -7,7 +7,7 @@ public class Medico extends Usuario{
 
     // Construtor, getters e setters
     public Medico() {
-        super();
+        super(null, null, null);
     }
     
     public Medico(String usuario, String senha, String nome, String especialidade, String registroCrm) {
