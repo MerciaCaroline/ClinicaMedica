@@ -1,14 +1,17 @@
 package views;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.sql.Time;
 // Pacote visão (View)
 import java.util.Scanner;
-import java.util.UUID;
+
 
 import controllers.RecepcionistaController;
 import models.Medico;
 import models.Paciente;
+import models.Consulta;
 
 public class RecepcionistaView {
     private RecepcionistaController controller;
@@ -21,7 +24,7 @@ public class RecepcionistaView {
     }
 
     // Método para exibir o menu de opções do recepcionista
-    public void exibirMenuRecepcionista() throws ParseException {
+    public void exibirMenuRecepcionista() throws ParseException, SQLException {
         int opcao = 0;
 
         do {
@@ -49,29 +52,55 @@ public class RecepcionistaView {
     }
 
     // Método para marcar uma nova consulta
-    public void marcarConsulta() throws ParseException {
-        Medico medico = new Medico();
-        Paciente paciente = new Paciente();
-        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
+    public void marcarConsulta() throws ParseException, SQLException {
+
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+ 
 
         System.out.println("Digite o nome do médico: ");
-        medico.setNome(scanner.next());
+        String nomeMedico = scanner.next();
 
+        // Buscar o médico no banco de dados
+        Medico medico = controller.buscarMedicoPorNome(nomeMedico);
+        if (medico == null) {
+            System.out.println("Médico não encontrado.");
+            return;
+        }
+
+        // Solicitar informações do paciente
         System.out.println("Digite o nome do paciente: ");
-        paciente.setNome(scanner.next());
+        String nomePaciente = scanner.next();
 
-        System.out.println("Digite a data da consulta (no formato yyyy-MM-dd): ");
-        Date dataConsulta = formato.parse(scanner.next());
+        // Buscar o paciente no banco de dados
+        Paciente paciente = controller.buscarPacientePorNome(nomePaciente);
+        if (paciente == null) {
+            System.out.println("Paciente não encontrado.");
+            return;
+        }
 
-        System.out.println("Digite o horário da consulta (no formato HH:mm): ");
-        String horarioConsulta = scanner.next();
+        System.out.println("Digite a data no formato yyyy-MM-dd: ");
+        String dataString = scanner.next();
+        Date dataConsulta = formato.parse(dataString); 
 
-        boolean sucesso = controller.marcarConsulta(paciente, medico, dataConsulta, horarioConsulta);
+        System.out.println("Digite a hora no formato HH:mm: ");
+        String horaString = scanner.next();
+        Date format_hora = sdf.parse(horaString);
+        Time horaConsulta = new Time(format_hora.getTime());
 
-        if (sucesso) {
-            System.out.println("Consulta marcada com sucesso!");
+        // Solicitar descrição da consulta
+        System.out.println("Digite a descricao sobre a consulta: ");
+        String descricaoConsulta = scanner.next();
+        
+        // Criar a consulta
+        Consulta consulta = new Consulta(paciente, medico, dataConsulta, horaConsulta, descricaoConsulta);
+
+        // Lógica para marcar a consulta (exemplo: salvar no banco de dados)
+        boolean consultaMarcada = controller.marcarConsulta(consulta);
+        if (consultaMarcada) {
+            System.out.println("Consulta marcada com sucesso.");
         } else {
-            System.out.println("Erro ao marcar consulta. Verifique os dados informados.");
+            System.out.println("Erro ao marcar a consulta.");
         }
     }
 

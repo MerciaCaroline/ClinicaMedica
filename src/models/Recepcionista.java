@@ -11,4 +11,15 @@ public class Recepcionista extends Usuario{
         this.id = id;
     }
     
+    // public String getUsuario(){
+    //     return this.usuario;
+    // }
+
+    // public void setUsuario(String usuario){
+    //     this.usuario = usuario;
+    // }
+
+    // public String getSenha(){
+    //     return this.senha;
+    // }
 }

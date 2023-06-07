@@ -63,6 +63,29 @@ public class PacienteDAO {
         }
     }
 
+    public Paciente buscarPorNome(String nome_buscar) throws SQLException {
+        String sql = "SELECT * FROM medico WHERE nome = ?";
+
+        Paciente paciente = null;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int id = resultSet.getInt("id");
+                    String usuario = resultSet.getString("usuario");
+                    String senha = resultSet.getString("senha");
+                    String nome = resultSet.getString("nome");
+                    String endereco = resultSet.getString("endereco");
+                    String telefone = resultSet.getString("telefone");
+
+                    paciente = new Paciente(id, usuario, senha, nome, endereco, telefone);
+                }
+            }
+        }
+
+        return medico;
+    }
+
     public void excluir(int id) throws SQLException {
         String query = "DELETE FROM pacientes WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {

@@ -75,7 +75,7 @@ public class MedicoDAO {
         return medico;
     }
 
-    public static Medico buscarPorNome(String nome_buscar) throws SQLException {
+    public Medico buscarPorNome(String nome_buscar) throws SQLException {
         String sql = "SELECT * FROM medico WHERE nome = ?";
 
         Medico medico = null;

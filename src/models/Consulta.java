@@ -1,19 +1,22 @@
 package models;
 
 import java.util.Date;
+import java.sql.Time;
 
 public class Consulta {
     private Paciente paciente;
     private Medico medico;
     private Date data;
-    private String descricao;
+    private Time hora;
+    private String observacao;
     private int id;
 
-    public Consulta(Paciente paciente, Medico medico, Date data, String descricao) {
+    public Consulta(Paciente paciente, Medico medico, Date dataConsulta, Time hora, String observacao) {
         this.paciente = paciente;
         this.medico = medico;
-        this.data = data;
-        this.descricao = descricao;
+        this.data = dataConsulta;
+        this.hora = hora;
+        this.observacao = observacao;
     }
 
     public Consulta(String nomePaciente, Date dataConsulta) {
@@ -54,11 +57,19 @@ public class Consulta {
         this.data = data;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public Time getHora() {
+        return hora;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setHora(Time hora) {
+        this.hora = hora;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 }

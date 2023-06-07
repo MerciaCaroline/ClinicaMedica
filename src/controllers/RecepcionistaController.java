@@ -1,49 +1,103 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.sql.SQLException;
 
+import dataaccess.RecepcionistaDAO;
+import dataaccess.MedicoDAO;
+import dataaccess.PacienteDAO;
 import models.Consulta;
 import models.Medico;
 import models.Paciente;
 
 public class RecepcionistaController {
-    
-    private List<Paciente> pacientes;
-    private List<Consulta> consultas;
-    
-    // Construtor
-    public RecepcionistaController() {
-        this.pacientes = new ArrayList<>();
-    }
-    
-    // Método para marcar uma consulta
-    public boolean marcarConsulta(Paciente paciente, Medico medico, Date dataConsulta, String descricao) {
-        // Lógica para marcar a consulta: 
-        //verifica disponibilidade na agenda
-        // insere na tabela de consultas
-        //retorna true ou false
-        Consulta consulta = new Consulta(paciente, medico, dataConsulta, descricao);
-        pacientes.add(paciente);
-        consultas.add(consulta);
+    private RecepcionistaDAO recepcionistaDAO;
+    private MedicoDAO medicoDAO;
+    private PacienteDAO pacienteDAO;
 
-        return true;
+    public RecepcionistaController(RecepcionistaDAO recepcionistaDAO) {
+        this.recepcionistaDAO = recepcionistaDAO;
     }
 
-    // Método para cancelar uma consulta
-    public boolean cancelarConsulta(int idConsulta) {
-        // Lógica para cancelar a consulta
-        // update na tabela de consultas marcando o status para cancelado
-        //retorna true ou false
-        Consulta obterConsulta = consultas.stream().filter(consulta -> consulta.getId() == idConsulta).findFirst().get();
-        
-        if(obterConsulta != null){
-            consultas.remove(obterConsulta);
-            return true;
+    public boolean registrarPaciente(Paciente paciente) {
+        try {
+            // Verificar se o paciente já está cadastrado
+            if (recepcionistaDAO.pacienteExistente(paciente.getNome())) {
+                System.out.println("O paciente já está cadastrado.");
+                return false; 
+            }
+
+            // Realizar o registro do paciente
+            if (recepcionistaDAO.inserirPaciente(paciente)) {
+                System.out.println("Paciente registrado com sucesso.");
+                return true;
+            } else {
+                System.out.println("Erro ao registrar o paciente.");
+                return false;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados.");
+            return false;
         }
+    }
 
-        return false;
+    public boolean marcarConsulta(Consulta consulta) throws SQLException {
+        try {
+            //Verificar se o médico já tem uma consulta nessa hora
+            if(recepcionistaDAO.consultaExistente(consulta)){
+                System.out.println("O médico já tem consulta marcada para esse dia e hora.");
+                return false;
+            }
+
+            //Realizar a criação da consulta
+            if(recepcionistaDAO.criarConsulta(consulta)){
+                System.out.println("Consulta registrada com sucesso.");
+                return true;
+            }
+            else{
+                System.out.println("Erro ao registrar a consulta.");
+                return false;
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erro ao acessar o banco de dados.");
+            return false;
+        }
+    }
+
+    public Medico buscarMedicoPorNome(String nome) throws SQLException{
+        try {
+           Medico medico = medicoDAO.buscarPorNome(nome);
+           return medico;
+        } catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados.");
+            return null;
+        }
+    }
+
+    public Paciente buscarPacientePorNome(String nome) throws SQLException{
+        try {
+            Paciente paciente = pacienteDAO.buscarPorNome(nome);
+           return paciente;
+        } catch (Exception e) {
+            System.out.println("Erro ao acessar o banco de dados.");
+            return null;
+        }
+    }
+
+    public boolean cancelarConsulta(int CodigoConsulta){
+        try {
+            if(recepcionistaDAO.cancelarConsulta(CodigoConsulta)){
+                System.out.println("Consulta cancelada.");
+                return true;
+            }
+            else{
+                System.out.println("Erro, consulta inexistente.");
+                return false;
+            }
+        }
+        catch (SQLException e){
+            System.out.println("Erro ao acessar o banco de dados.");
+            return false;
+        }
     }
 }
