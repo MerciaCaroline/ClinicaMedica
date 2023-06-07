@@ -1,40 +1,68 @@
 package controllers;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import models.Consulta;
+import models.Exame;
 import models.Medico;
 import models.Paciente;
-import models.ResultadoExame;
 
 public class MedicoController {
-    private static Medico _medico;
+    private List<Paciente> historicoPacientes;
+    private List<Consulta> consultas;
+    private List<Exame> examesPendentes;
 
-    public MedicoController(Medico medico) {
-        _medico = medico;
+     public MedicoController() {
+        this.historicoPacientes = new ArrayList<>();
+        this.consultas = new ArrayList<>();
+        this.examesPendentes = new ArrayList<>();
     }
 
-    public void registrarConsulta(Paciente paciente, Date data, String descricao) {
-        // Lógica para registrar a consulta
-    }
-
-    public void autorizarExameOnline(int codigo) {
+    public boolean autorizarExame(int codigo) {
         // Lógica para autorizar o exame para o paciente
+        examesPendentes.stream().filter(exame -> exame.getId() == codigo).findFirst().get().setAutorizado(true);
+        return examesPendentes.stream().filter(exame -> exame.getId() == codigo).findFirst() != null;
     }
 
-    public List<Consulta> consultarConsultas() {
+    public List<Consulta> consultarConsultas(Medico medico) {
         // Lógica para consultar as consultas agendadas para o médico
-        return null;
+        List<Consulta> consultasMedico = new ArrayList<>();
+        
+        for (Consulta consulta : consultas) {
+            if (consulta.getMedico().equals(medico)) {
+                consultasMedico.add(consulta);
+            }
+        }
+        
+        return consultasMedico;
     }
 
-    public List<String> getHistoricoPaciente(String nomePaciente) {
+    public void registrarHistoricoPaciente(String nomePaciente, String historicoPaciente) {
+        Paciente paciente = new Paciente(nomePaciente, historicoPaciente);
+        historicoPacientes.add(paciente);
+    }
+
+    public List<Paciente> getHistoricoPacientes() {
         // Lógica para consultar as consultas agendadas para o médico
-        return null;
+        return historicoPacientes;
     }
 
-    public List<ResultadoExame> consultarResultadosExames() {
+    public List<Exame> consultarResultadosExames(Medico medico) {
         // Lógica para consultar os resultados de exames dos pacientes atendidos pelo médico
-        return null;
+        List<Exame> examesPendentesMedico = new ArrayList<>();
+        
+        for (Exame exame : examesPendentes) {
+            if (exame.getMedico().equals(medico) && !exame.getAutorizado() == true) {
+                examesPendentesMedico.add(exame);
+            }
+        }
+        
+        return examesPendentesMedico;
+    }
+
+    // Método para registrar uma nova consulta
+    public void registrarConsulta(Consulta consulta) {
+        consultas.add(consulta);
     }
 }

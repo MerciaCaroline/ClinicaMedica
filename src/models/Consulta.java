@@ -7,15 +7,30 @@ public class Consulta {
     private Medico medico;
     private Date data;
     private String descricao;
+    private int id;
 
-    public Consulta(Paciente paciente, Medico medico, Date data, String descricao) {
+    public Consulta(int id, Paciente paciente, Medico medico, Date data, String descricao) {
+        this.id = id;
         this.paciente = paciente;
         this.medico = medico;
         this.data = data;
         this.descricao = descricao;
     }
 
+    public Consulta(String nomePaciente, Date dataConsulta) {
+        this.paciente.setNome(nomePaciente);
+        this.data = dataConsulta;
+    }
+
     // Construtor, getters e setters
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public Paciente getPaciente() {
         return this.paciente;
     }

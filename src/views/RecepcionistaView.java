@@ -1,8 +1,14 @@
-package view;
+package views;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 // Pacote visão (View)
 import java.util.Scanner;
+import java.util.UUID;
 
 import controllers.RecepcionistaController;
+import models.Medico;
+import models.Paciente;
 
 public class RecepcionistaView {
     private RecepcionistaController controller;
@@ -15,7 +21,7 @@ public class RecepcionistaView {
     }
 
     // Método para exibir o menu de opções do recepcionista
-    public void exibirMenuRecepcionista() {
+    public void exibirMenuRecepcionista() throws ParseException {
         int opcao = 0;
 
         do {
@@ -43,20 +49,27 @@ public class RecepcionistaView {
     }
 
     // Método para marcar uma nova consulta
-    public void marcarConsulta() {
+    public void marcarConsulta() throws ParseException {
+        Medico medico = new Medico();
+        Paciente paciente = new Paciente();
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
+        
+        System.out.println("Digite o identificador da consulta: ");
+        int id = scanner.nextInt();
+
         System.out.println("Digite o nome do médico: ");
-        String nomeMedico = scanner.next();
+        medico.setNome(scanner.next());
 
         System.out.println("Digite o nome do paciente: ");
-        String nomePaciente = scanner.next();
+        paciente.setNome(scanner.next());
 
         System.out.println("Digite a data da consulta (no formato yyyy-MM-dd): ");
-        String dataConsulta = scanner.next();
+        Date dataConsulta = formato.parse(scanner.next());
 
         System.out.println("Digite o horário da consulta (no formato HH:mm): ");
         String horarioConsulta = scanner.next();
 
-        boolean sucesso = controller.marcarConsulta(nomeMedico, nomePaciente, dataConsulta, horarioConsulta);
+        boolean sucesso = controller.marcarConsulta(id, paciente, medico, dataConsulta, horarioConsulta);
 
         if (sucesso) {
             System.out.println("Consulta marcada com sucesso!");

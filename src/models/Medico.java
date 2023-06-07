@@ -7,6 +7,10 @@ public class Medico extends Usuario{
 
     // Construtor, getters e setters
 
+    public Medico() {
+        super();
+    }
+    
     public Medico(String usuario, String senha, String nome, String especialidade, String registroCrm) {
         super(usuario, senha, nome);
         this.especialidade = especialidade;
