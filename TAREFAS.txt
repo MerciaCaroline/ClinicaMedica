@@ -1,0 +1,126 @@
+MODEL + DAO
+- Exame:
+    int id;
+    Paciente paciente;
+    Medico medico;
+	Laboratorio laboratorio;
+    String tipo;
+    Date dataSolicitacao;
+    Date? dataResultado;
+	String resultado; 
+	bool disponivelOnline = false;
+	bool entreguePaciente = = false;
+	
+- Historico Paciente
+	int id;
+    Paciente paciente;
+	Date data;
+	String descricao; 
+	
+- Consulta
+    int id;
+	Paciente paciente;
+    Medico medico;
+    Date data;
+	Time Hora;
+    String observacao;
+
+- Medico
+- Paciente
+- Recepcionista
+- Laboratorio
+
+	
+VIEWS
+- Principal (Clinica)
+("=== CLINICA MEDICA ===");
+("1. Paciente");
+("2. Médico");
+("3. Recepcionista");
+("4. Laboratorio");
+("3. Sair");
+("Digite a opção desejada: ");
+
+caso 2,3 e 4, autenticar usuario antes de seguir pra proxima tela 
+
+- Paciente													MERCIA
+("=== MENU DO PACIENTE ===");
+("1. Consultar resultados de exames");
+("2. Sair");
+("Digite a opção desejada: ");
+
+- Medico													MARCONE
+	("=== MENU DO MÉDICO ===");
+	("1. Visualizar histórico de pacientes");
+	("2. Registrar histórico de paciente");
+	("3. Consultar resultados de exames pendentes");
+	("4. Consultar consultas agendadas");
+	("5. Autorizar exame online");
+	("6. Marcar exame como entregue");
+	("7. Solicitar Exame");
+	("7. Sair");
+	("Digite a opção desejada: ");
+	
+- Recepcionista 											HENRIQUE
+    ("=== MENU DO RECEPCIONISTA ===");
+    ("1. Marcar consulta");
+    ("2. Cancelar consulta");
+    ("3. Sair");
+    ("Digite a opção desejada: ");
+	
+- Laboratorio												MERCIA
+    ("=== MENU DO LABORATORIO ===");
+    ("1. Enviar resultado de exame");
+    ("2. Sair");
+    ("Digite a opção desejada: ");
+	
+	
+	
+CONTROLLERS 
+- Paciente
+-- Obter exame pelo codigo: 
+	Busca no banco o exame pelo ID e retornar String resultado ou mensagem de exame nao encontrado
+
+- Medico 
+-- Consultar Resultados Exames
+	buscar no banco os exames pelo id do paciente + id do medico com resultado != null
+	
+-- Disponibilizar exame online para paciente (codigo)
+    marcar disponivel = true
+
+-- Marcar exame como entregue
+	marcar disponivelOnline = true
+	
+-- Listar consultas
+    obter pela DAO as consultas com data > agora e id do medico
+	
+-- Solicitar Exame
+	Insert na tabela de exame
+		Paciente paciente;
+		Medico medico;
+		String tipo;
+		Date dataSolicitacao;
+	
+- Recepcionista
+-- Registrar Paciente
+	insert na tabela de paciente
+	
+-- marcarConsulta
+	cpfPaciente + medico + data + horario
+	Verifica se paciente está cadastrado, se não está realiza o cadastro
+	Verifica se data e horario estao disponiveis e marca consulta inserindo na tabela Consulta
+	
+-- cancelarConsulta
+	delete na tabela de consulta
+	
+-Laboratorio
+-- Enviar resultado de exame 
+	update no Exame: dataResultado + resultado
+
+- Historico Paciente 
+-- Listar Historico( cpf):
+	chama o listar da DAO
+	
+-- Registrar Historico Paciente (Paciente, string historico)
+	chama o inserir da DAO historico paciente
+	
