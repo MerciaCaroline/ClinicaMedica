@@ -1,54 +1,62 @@
 package models;
 
-public class Paciente extends Usuario{
+import java.util.ArrayList;
+import java.util.List;
+
+public class Paciente extends Usuario {
     private String telefone;
     private String endereco;
-    private String historicoPaciente;
+    private List<Consulta> historicoConsultas;
+    private List<ResultadoExame> resultadosExames;
 
-    public Paciente(int id, String nome, String telefone, String endereco) {
-        this.id = id;
-        this.nome = nome;
+    public Paciente(String usuario, String senha, String nome, String telefone, String endereco) {
+        super(usuario, senha, nome);
         this.telefone = telefone;
         this.endereco = endereco;
+        this.historicoConsultas = new ArrayList<>();
+        this.resultadosExames = new ArrayList<>();
     }
 
-    public Paciente(String nome, String historicoPaciente) {
-        this.nome = nome;
-        this.historicoPaciente = historicoPaciente;
+    public Paciente(int id, String usuario, String senha, String nome, String telefone, String endereco) {
+        super(usuario, senha, nome);
+        this.id = id;
+        this.telefone = telefone;
+        this.endereco = endereco;
+        this.historicoConsultas = new ArrayList<>();
+        this.resultadosExames = new ArrayList<>();
     }
 
-    // Construtor, getters e setters
-    public Paciente() {
-        super();
-    }
+    // Getters and Setters
 
     public String getTelefone() {
-        return this.telefone;
-    }
-
-    public String getEndereco() {
-        return this.endereco;
-    }
-
-    public String getHistoricoPaciente() {
-        return this.historicoPaciente;
+        return telefone;
     }
 
     public void setTelefone(String telefone) {
-        if (telefone.length() > 0) {
-            this.telefone = telefone;
-        }
+        this.telefone = telefone;
+    }
+
+    public String getEndereco() {
+        return endereco;
     }
 
     public void setEndereco(String endereco) {
-        if (endereco.length() > 0) {
-            this.endereco = endereco;
-        }
+        this.endereco = endereco;
     }
 
-    public void setHistoricoPaciente(String historicoPaciente) {
-        if (historicoPaciente.length() > 0) {
-            this.historicoPaciente = historicoPaciente;
-        }
+    public List<Consulta> getHistoricoConsultas() {
+        return historicoConsultas;
+    }
+
+    public void adicionarConsulta(Consulta consulta) {
+        historicoConsultas.add(consulta);
+    }
+
+    public List<ResultadoExame> getResultadosExames() {
+        return resultadosExames;
+    }
+
+    public void adicionarResultadoExame(ResultadoExame resultadoExame) {
+        resultadosExames.add(resultadoExame);
     }
 }

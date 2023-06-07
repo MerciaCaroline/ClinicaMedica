@@ -6,7 +6,6 @@ public class Medico extends Usuario{
     private String registroCrm;
 
     // Construtor, getters e setters
-
     public Medico() {
         super();
     }
