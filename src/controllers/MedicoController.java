@@ -1,58 +1,68 @@
 package controllers;
 
-import java.sql.SQLException;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import models.Consulta;
+import models.Exame;
 import models.Medico;
 import models.Paciente;
-import models.ResultadoExame;
-
-import dataaccess.MedicoDAO;
 
 public class MedicoController {
-    private Medico medico;
+    private List<Paciente> historicoPacientes;
+    private List<Consulta> consultas;
+    private List<Exame> examesPendentes;
 
-    public MedicoController(Medico medico) {
-        this.medico = medico;
+     public MedicoController() {
+        this.historicoPacientes = new ArrayList<>();
+        this.consultas = new ArrayList<>();
+        this.examesPendentes = new ArrayList<>();
     }
 
-
-    public void registrarConsulta(Paciente paciente, Date data, String descricao) {
-        // Lógica para registrar a consulta
+    public boolean autorizarExame(int codigo) {
+        // Lógica para autorizar o exame para o paciente
+        examesPendentes.stream().filter(exame -> exame.getId() == codigo).findFirst().get().setAutorizado(true);
+        return examesPendentes.stream().filter(exame -> exame.getId() == codigo).findFirst() != null;
     }
 
-    public void autorizarExameOnline(int codigoExame) {
-        // Lógica para autorizar a disponibilidade do exame online
-        // ExameController exameController = new ExameController();
-        // exameController.autorizarExameOnline(codigoExame);
-    }
-
-    public List<Consulta> consultarConsultas() {
+    public List<Consulta> consultarConsultas(Medico medico) {
         // Lógica para consultar as consultas agendadas para o médico
-        return null;
-    }
-
-    public List<String> getHistoricoPaciente(String nomePaciente) {
-        // Lógica para obter o histórico do paciente pelo nome
-        // PacienteController pacienteController = new PacienteController();
-        // return pacienteController.consultarHistoricoPaciente(nomePaciente);
-        return null;
-    }
-
-    public static Medico getMedicoPorNome(String NomeMedico){
-        Medico medico = null;
-        try {
-            medico = MedicoDAO.buscarPorNome(NomeMedico);
-        } catch (SQLException e) {
-            medico = null;
+        List<Consulta> consultasMedico = new ArrayList<>();
+        
+        for (Consulta consulta : consultas) {
+            if (consulta.getMedico().equals(medico)) {
+                consultasMedico.add(consulta);
+            }
         }
-        return medico;
+        
+        return consultasMedico;
     }
 
-    public List<ResultadoExame> consultarResultadosExames() {
+    public void registrarHistoricoPaciente(String nomePaciente, String historicoPaciente) {
+        Paciente paciente = new Paciente(nomePaciente, historicoPaciente);
+        historicoPacientes.add(paciente);
+    }
+
+    public List<Paciente> getHistoricoPacientes() {
+        // Lógica para consultar as consultas agendadas para o médico
+        return historicoPacientes;
+    }
+
+    public List<Exame> consultarResultadosExames(Medico medico) {
         // Lógica para consultar os resultados de exames dos pacientes atendidos pelo médico
-        return null;
+        List<Exame> examesPendentesMedico = new ArrayList<>();
+        
+        for (Exame exame : examesPendentes) {
+            if (exame.getMedico().equals(medico) && !exame.getAutorizado() == true) {
+                examesPendentesMedico.add(exame);
+            }
+        }
+        
+        return examesPendentesMedico;
+    }
+
+    // Método para registrar uma nova consulta
+    public void registrarConsulta(Consulta consulta) {
+        consultas.add(consulta);
     }
 }
