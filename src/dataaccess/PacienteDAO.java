@@ -56,6 +56,19 @@ public class PacienteDAO {
         return pacientes;
     }
 
+    public Paciente buscarPorId(int id) throws SQLException {
+        String query = "SELECT * FROM pacientes WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return criarPaciente(resultSet);
+                }
+            }
+        }
+        return null;
+    }
+
     public void atualizar(Paciente paciente) throws SQLException {
         String query = "UPDATE pacientes SET nome = ?, relefone = ?, endereco = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -102,8 +115,11 @@ public class PacienteDAO {
         int id = resultSet.getInt("id");
         String nome = resultSet.getString("nome");
         String telefone = resultSet.getString("telefone");
-        String email = resultSet.getString("email");
-        return new Paciente(id, nome, telefone, email);
+        String usuario = resultSet.getString("usuario");
+        String senha = resultSet.getString("senha");
+        String endereco = resultSet.getString("endereco");
+
+        return new Paciente(id, usuario, senha, nome, telefone, endereco);
     }
 }
 

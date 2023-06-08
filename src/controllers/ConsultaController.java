@@ -12,7 +12,7 @@ public class ConsultaController {
     }
 
     public static void atualizarDescricao(String novaDescricao) {
-        _consulta.setDescricao(novaDescricao);
+        _consulta.setObservacao(novaDescricao);
         // Lógica para atualizar a descrição da consulta
     }
 

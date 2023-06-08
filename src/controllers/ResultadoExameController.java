@@ -3,10 +3,7 @@ package controllers;
 import models.ResultadoExame;
 
 public class ResultadoExameController {
-    private static ResultadoExame _resultadoExame;
-
     public ResultadoExameController(ResultadoExame resultadoExame) {
-        _resultadoExame = resultadoExame;
     }
 
     public void disponibilizarOnline() {

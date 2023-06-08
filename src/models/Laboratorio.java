@@ -1,7 +1,5 @@
 package models;
 
-import java.util.List;
-
 public class Laboratorio {
     private int id;
     private String nome;

@@ -12,8 +12,12 @@ import models.Medico;
 public class MedicoDAO {
     private static Connection connection;
 
+    public MedicoDAO() {
+        super();
+    }
+
     public MedicoDAO(Connection connection) {
-        this.connection = connection;
+        MedicoDAO.connection = connection;
     }
 
     public void inserir(Medico medico) throws SQLException {

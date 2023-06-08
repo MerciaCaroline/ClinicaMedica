@@ -11,6 +11,10 @@ public class Consulta {
     private String observacao;
     private int id;
 
+    public Consulta() {
+        super();
+    }
+
     public Consulta(Paciente paciente, Medico medico, Date dataConsulta, Time hora, String observacao) {
         this.paciente = paciente;
         this.medico = medico;

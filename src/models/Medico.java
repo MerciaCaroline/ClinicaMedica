@@ -7,7 +7,7 @@ public class Medico extends Usuario{
 
     // Construtor, getters e setters
     public Medico() {
-        super(null, null, null);
+        super();
     }
     
     public Medico(String usuario, String senha, String nome, String especialidade, String registroCrm) {
@@ -37,6 +37,18 @@ public class Medico extends Usuario{
         return this.telefone;
     }
 
+    public String getNome() {
+        return this.nome;
+    }
+
+    public String getUsuario() {
+        return this.usuario;
+    }
+
+    public String getSenha() {
+        return this.senha;
+    }
+
     //Setters
     public void setRegistroCrm(String registroCrm) {
         this.registroCrm = registroCrm;
@@ -51,6 +63,24 @@ public class Medico extends Usuario{
     public void setTelefone(String telefone) {
         if (telefone.length() > 0) {
             this.telefone = telefone;
+        }
+    }
+
+    public void setNome(String nome) {
+        if (nome.length() > 0) {
+            this.nome = nome;
+        }
+    }
+
+    public void setUsuario(String usuario) {
+        if (usuario.length() > 0) {
+            this.usuario = usuario;
+        }
+    }
+
+    public void setSenha(String senha) {
+        if (senha.length() > 0) {
+            this.senha = senha;
         }
     }
 }

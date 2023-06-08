@@ -1,6 +1,7 @@
 package controllers;
 
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -55,8 +56,8 @@ public class PacienteController {
     }
 
     // Outros métodos
-    public void marcarConsulta(Medico medico, Date data, String descricao) {
-        Consulta consulta = new Consulta(paciente, medico, data, descricao);
+    public void marcarConsulta(Medico medico, Date data, Time horarioConsulta, String descricao) {
+        Consulta consulta = new Consulta(paciente, medico, data, horarioConsulta, descricao);
         consultas.add(consulta);
     }
 

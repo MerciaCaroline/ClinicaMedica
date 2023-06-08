@@ -14,7 +14,7 @@ public class ExameDAO {
     private static Connection connection;
     
     public ExameDAO(Connection connection) {
-        this.connection = connection;
+        ExameDAO.connection = connection;
     }
 
     public void inserir(Exame exame) throws SQLException {
