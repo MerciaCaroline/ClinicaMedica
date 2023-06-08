@@ -55,6 +55,10 @@ public class Paciente extends Usuario {
         return historicoPaciente;
     }
 
+    public void setHistoricoPaciente(String historicoPaciente) {
+        this.historicoPaciente = historicoPaciente;
+    }
+
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }

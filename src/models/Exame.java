@@ -10,6 +10,10 @@ public class Exame {
     private Date data;
     private boolean autorizado;
 
+    public Exame() {
+        super();
+    }
+
     public Exame(int id, Paciente paciente, Medico medico, String tipo, Date data, boolean autorizado) {
         this.id = id;
         this.paciente = paciente;

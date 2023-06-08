@@ -1,9 +1,11 @@
 package controllers;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import dataaccess.PacienteDAO;
 import models.Consulta;
 import models.Exame;
 import models.Medico;
@@ -14,13 +16,45 @@ public class PacienteController {
     private Paciente paciente;
     private List<Consulta> consultas;
     private List<ResultadoExame> resultadosExames;
+    private PacienteDAO pacienteDAO;
+
+    public PacienteController() {
+        super();
+    }
 
     public PacienteController(Paciente paciente) {
         this.paciente = paciente;
         this.consultas = new ArrayList<>();
         this.resultadosExames = new ArrayList<>();
+        this.pacienteDAO = new PacienteDAO();
     }
 
+    // CRUD
+    public void cadastrarPaciente(Paciente paciente) throws SQLException{
+        pacienteDAO.criar(paciente);
+    }
+
+    public Paciente buscarPaciente(int id) throws SQLException{
+        return pacienteDAO.ler(id);
+    }
+
+    public List<Paciente> buscarTodosPacientes() throws SQLException{
+        return pacienteDAO.lerTodos();
+    }
+
+    public Paciente buscarPacientePorNome(String nome) throws SQLException{
+        return pacienteDAO.buscarPorNome(nome);
+    }
+
+    public void atualizarPaciente(Paciente paciente) throws SQLException{
+        pacienteDAO.atualizar(paciente);
+    }
+
+    public void removerPaciente(int id) throws SQLException{
+        pacienteDAO.excluir(id);
+    }
+
+    // Outros métodos
     public void marcarConsulta(Medico medico, Date data, String descricao) {
         Consulta consulta = new Consulta(paciente, medico, data, descricao);
         consultas.add(consulta);

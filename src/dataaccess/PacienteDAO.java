@@ -12,6 +12,10 @@ import models.Paciente;
 public class PacienteDAO {
     private Connection connection;
 
+    public PacienteDAO() {
+        super();
+    }
+
     public PacienteDAO(Connection connection) {
         this.connection = connection;
     }
@@ -83,7 +87,7 @@ public class PacienteDAO {
             }
         }
 
-        return medico;
+        return paciente;
     }
 
     public void excluir(int id) throws SQLException {
