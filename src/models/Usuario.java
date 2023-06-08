@@ -35,4 +35,23 @@ public class Usuario {
         }
     }
 
+    public String getUsuario() {
+        return this.usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        if (usuario.length() > 0) {
+            this.usuario = usuario;
+        }
+    }
+
+    public String getSenha() {
+        return this.senha;
+    }
+
+    public void setSenha(String senha) {
+        if (senha.length() > 0) {
+            this.senha = senha;
+        }
+    }
 }

@@ -1,21 +1,17 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Paciente extends Usuario {
     private String telefone;
     private String endereco;
     private String historicoPaciente;
-    private List<Consulta> historicoConsultas;
-    private List<ResultadoExame> resultadosExames;
 
+    // Construtores
     public Paciente(){
-        super(null, null, null);
+        super();
     }
 
     public Paciente(String nomePaciente, String historicoPaciente) {
-        super(null, null, nomePaciente);
+        super();
         this.nome = nomePaciente;
         this.historicoPaciente = historicoPaciente;
     }
@@ -24,8 +20,6 @@ public class Paciente extends Usuario {
         super(usuario, senha, nome);
         this.telefone = telefone;
         this.endereco = endereco;
-        this.historicoConsultas = new ArrayList<>();
-        this.resultadosExames = new ArrayList<>();
     }
 
     public Paciente(int id, String usuario, String senha, String nome, String telefone, String endereco) {
@@ -33,11 +27,48 @@ public class Paciente extends Usuario {
         this.id = id;
         this.telefone = telefone;
         this.endereco = endereco;
-        this.historicoConsultas = new ArrayList<>();
-        this.resultadosExames = new ArrayList<>();
     }
 
     // Getters and Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        if (id > 0) {
+            this.id = id;
+        }
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        if (usuario.length() > 0) {
+            this.usuario = usuario;
+        }
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        if (senha.length() > 0) {
+            this.senha = senha;
+        }
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        if (nome.length() > 0) {
+            this.nome = nome;
+        }
+    }
 
     public String getTelefone() {
         return telefone;
@@ -51,35 +82,15 @@ public class Paciente extends Usuario {
         return endereco;
     }
 
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
     public String getHistoricoPaciente() {
         return historicoPaciente;
     }
 
     public void setHistoricoPaciente(String historicoPaciente) {
         this.historicoPaciente = historicoPaciente;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    public void setHistoricoConsultas(List<Consulta> historicoConsultas) {
-        this.historicoConsultas = historicoConsultas;
-    }
-
-    public List<Consulta> getHistoricoConsultas() {
-        return historicoConsultas;
-    }
-
-    public void adicionarConsulta(Consulta consulta) {
-        historicoConsultas.add(consulta);
-    }
-
-    public List<ResultadoExame> getResultadosExames() {
-        return resultadosExames;
-    }
-
-    public void adicionarResultadoExame(ResultadoExame resultadoExame) {
-        resultadosExames.add(resultadoExame);
     }
 }
