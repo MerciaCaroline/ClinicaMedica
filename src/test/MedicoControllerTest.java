@@ -15,6 +15,7 @@ import controllers.ExameController;
 import controllers.MedicoController;
 import models.Exame;
 import models.Paciente;
+import models.ResultadoExame;
 
 public class MedicoControllerTest {
     private MedicoController medicoController;
@@ -78,18 +79,11 @@ public class MedicoControllerTest {
     @Test
     public void testConsultarResultadosExames() throws SQLException {
         // Preparar dados de teste
-        ExameController exameController = medicoController.exameController;
-        int medicoId = 1;
-        List<Exame> resultadosEsperados = new ArrayList<>();
-        resultadosEsperados.add(new Exame());
-        resultadosEsperados.add(new Exame());
-        exameController.atualizarExame(new Exame());
-        exameController.atualizarExame(new Exame());
-
+        int exameId = 1;
         // Executar o método a ser testado
-        List<Exame> resultados = medicoController.consultarResultadosExames(medicoId);
+        ResultadoExame resultadoExame = medicoController.consultarResultadoExame(exameId);
 
         // Verificar o resultado
-        assertEquals(resultadosEsperados, resultados);
+        assertEquals(resultadoExame, new ResultadoExame());
     }
 }

@@ -1,20 +1,27 @@
 package controllers;
 
+import java.sql.SQLException;
+
+import dataaccess.ResultadoExameDAO;
 import models.ResultadoExame;
 
 public class ResultadoExameController {
-    public ResultadoExameController(ResultadoExame resultadoExame) {
+    public ResultadoExameDAO resultadoExameDAO;
+
+    public ResultadoExameController() {
+        resultadoExameDAO = new ResultadoExameDAO();
     }
 
-    public void disponibilizarOnline() {
-        // Lógica para disponibilizar o resultado do exame online
+    public ResultadoExame disponibilizarResultadoExame(int exameId) throws SQLException {
+        ResultadoExame resultadoExame = resultadoExameDAO.buscarResultadoExame(exameId);
+        if (resultadoExame != null) {
+            return resultadoExame;
+        }
+
+        return null;
     }
 
-    public void entregarAoPaciente() {
-        // Lógica para entregar o resultado do exame diretamente ao paciente
-    }
-
-    public void guardarNaClinica() {
-        // Lógica para guardar o resultado do exame na clínica para consulta posterior
+    public void registrarResultadoExame(ResultadoExame resultadoExame) throws SQLException {
+        resultadoExameDAO.inserir(resultadoExame);
     }
 }

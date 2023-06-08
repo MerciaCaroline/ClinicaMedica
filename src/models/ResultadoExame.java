@@ -4,8 +4,9 @@ import java.util.Date;
 
 public class ResultadoExame {
     private int id;
-    private Paciente paciente;
-    private Medico medico;
+    private int pacienteId;
+    private int medicoId;
+    private int exameId;
     private String tipo;
     private Date dataResultado;
     private String resultado;
@@ -15,9 +16,10 @@ public class ResultadoExame {
         super();
     }
 
-    public ResultadoExame(Paciente paciente, Medico medico, String tipo, Date dataResultado, String resultado) {
-        this.paciente = paciente;
-        this.medico = medico;
+    public ResultadoExame(int pacienteId, int medicoId, int exameId, String tipo, Date dataResultado, String resultado) {
+        this.pacienteId = pacienteId;
+        this.medicoId = medicoId;
+        this.exameId = exameId;
         this.tipo = tipo;
         this.dataResultado = dataResultado;
         this.resultado = resultado;
@@ -32,20 +34,28 @@ public class ResultadoExame {
         this.id = id;
     }
 
-    public Paciente getPaciente() {
-        return this.paciente;
+    public int getPaciente() {
+        return this.pacienteId;
     }
 
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
+    public void setPaciente(int pacienteId) {
+        this.pacienteId = pacienteId;
     }
 
-    public Medico getMedico() {
-        return this.medico;
+    public int getMedico() {
+        return this.medicoId;
     }
 
-    public void setMedico(Medico medico) {
-        this.medico = medico;
+    public void setMedico(int medicoId) {
+        this.medicoId = medicoId;
+    }
+
+    public int getExame() {
+        return this.exameId;
+    }
+
+    public void setExame(int exameId) {
+        this.exameId = exameId;
     }
 
     public String getTipo() {

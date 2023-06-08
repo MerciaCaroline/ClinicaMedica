@@ -1,15 +1,15 @@
 package controllers;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import dataaccess.MedicoDAO;
-import models.Exame;
 import models.Medico;
 import models.Paciente;
+import models.ResultadoExame;
 
 public class MedicoController {
     public ExameController exameController;
+    public ResultadoExameController resultadoExameController;
     public PacienteController pacienteController;
     private MedicoDAO medicoDAO;
 
@@ -43,11 +43,15 @@ public class MedicoController {
         return false;
     }
 
-    public List<Exame> consultarResultadosExames(int medicoId) throws SQLException {
-        return exameController.buscarResultadoExames(medicoId);
+    public ResultadoExame consultarResultadoExame(int examameId) throws SQLException {
+        return resultadoExameController.disponibilizarResultadoExame(examameId);
     }
 
     public Medico buscarMedicoPorNome(String nome) throws SQLException {
         return medicoDAO.buscarPorNome(nome);
+    }
+
+    public Medico buscarMedicoPorId(int id) throws SQLException {
+        return medicoDAO.buscarPorId(id);
     }
 }
