@@ -12,8 +12,12 @@ import models.Medico;
 public class MedicoDAO {
     private static Connection connection;
 
+    public MedicoDAO() {
+        super();
+    }
+
     public MedicoDAO(Connection connection) {
-        this.connection = connection;
+        MedicoDAO.connection = connection;
     }
 
     public void inserir(Medico medico) throws SQLException {
@@ -25,27 +29,6 @@ public class MedicoDAO {
             statement.setString(2, medico.getUsuario());
             statement.setString(2, medico.getSenha());
             statement.setString(2, medico.getTelefone());
-            statement.executeUpdate();
-        }
-    }
-
-    public void atualizar(Medico medico) throws SQLException {
-        String sql = "UPDATE medico SET nome = ?, especialidade = ?, telefone = ? WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, medico.getNome());
-            statement.setString(2, medico.getEspecialidade());
-            statement.setString(3, medico.getTelefone());
-            statement.setInt(3, medico.getId());
-            statement.executeUpdate();
-        }
-    }
-
-    public void excluir(int id) throws SQLException {
-        String sql = "DELETE FROM medico WHERE id = ?";
-
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
             statement.executeUpdate();
         }
     }
@@ -99,7 +82,7 @@ public class MedicoDAO {
         return medico;
     }
 
-    public List<Medico> listarTodos() throws SQLException {
+    public List<Medico> buscarTodos() throws SQLException {
         String sql = "SELECT * FROM medico";
         List<Medico> medicos = new ArrayList<>();
 
@@ -121,4 +104,26 @@ public class MedicoDAO {
 
         return medicos;
     }
+
+    public void atualizar(Medico medico) throws SQLException {
+        String sql = "UPDATE medico SET nome = ?, especialidade = ?, telefone = ? WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, medico.getNome());
+            statement.setString(2, medico.getEspecialidade());
+            statement.setString(3, medico.getTelefone());
+            statement.setInt(3, medico.getId());
+            statement.executeUpdate();
+        }
+    }
+
+    public void excluir(int id) throws SQLException {
+        String sql = "DELETE FROM medico WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        }
+    }
+
 }

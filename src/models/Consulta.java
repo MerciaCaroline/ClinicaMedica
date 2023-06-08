@@ -11,6 +11,11 @@ public class Consulta {
     private String observacao;
     private int id;
 
+    // Construtores
+    public Consulta() {
+        super();
+    }
+
     public Consulta(Paciente paciente, Medico medico, Date dataConsulta, Time hora, String observacao) {
         this.paciente = paciente;
         this.medico = medico;
@@ -24,7 +29,15 @@ public class Consulta {
         this.data = dataConsulta;
     }
 
-    // Construtor, getters e setters
+    // Getters e setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public Paciente getPaciente() {
         return paciente;
     }
@@ -35,14 +48,6 @@ public class Consulta {
 
     public Medico getMedico() {
         return medico;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setMedico(Medico medico) {

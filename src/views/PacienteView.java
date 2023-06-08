@@ -1,29 +1,31 @@
-package view;
+package views;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.sql.SQLException;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import controllers.MedicoController;
 import controllers.PacienteController;
 import models.Consulta;
-import models.Exame;
 import models.Medico;
-import models.Paciente;
 import models.ResultadoExame;
 
 public class PacienteView {
     private PacienteController controller;
+    private MedicoController medicoController;
     private Scanner scanner;
 
     public PacienteView(PacienteController controller) {
         this.controller = controller;
+        this.medicoController = new MedicoController();
         this.scanner = new Scanner(System.in);
     }
 
-    public void exibirMenuPaciente() throws ParseException {
+    public void exibirMenuPaciente() throws ParseException, SQLException {
         int opcao = 0;
 
         do {
@@ -70,30 +72,30 @@ public class PacienteView {
         } while (opcao != 8);
     }
 
-    public void marcarConsulta() throws ParseException {
+    public void marcarConsulta() throws ParseException, SQLException {
         System.out.println("Digite o nome do médico: ");
         String nomeMedico = scanner.next();
-        Medico medico = MedicoController.getMedicoPorNome(nomeMedico);
+        Medico medico = medicoController.buscarMedicoPorNome(nomeMedico);
         // Lógica adicional para obter o médico a partir do nome
 
         System.out.println("Digite a data da consulta (dd/mm/aaaa): ");
         String dataStr = scanner.next();
-        // Lógica adicional para converter a data de string para Date
+
+        System.out.println("Digite ohorário da consulta (dd/mm/aaaa): ");
+        String horarioStr = scanner.next();
 
         System.out.println("Digite a descrição da consulta: ");
         String descricao = scanner.next();
 
         Date dataConsulta = new SimpleDateFormat("dd/MM/yyyy").parse(dataStr);
-        controller.marcarConsulta(medico, dataConsulta, descricao); 
+        Time horarioConsulta = (Time) new SimpleDateFormat("HH:mm").parse(horarioStr);
+        controller.marcarConsulta(medico, dataConsulta, horarioConsulta, descricao); 
 
         System.out.println("Consulta marcada com sucesso.");
     }
 
     public void receberResultadoExame() {
         System.out.println("Digite o código do resultado do exame: ");
-        int codigoResultadoExame = scanner.nextInt();
-        // Lógica adicional para obter o resultado do exame a partir do código
-
         ResultadoExame resultadoExame = new ResultadoExame(/* parâmetros do resultado do exame */);
         controller.receberResultadoExame(resultadoExame);
 
@@ -102,9 +104,6 @@ public class PacienteView {
 
     public void cancelarConsulta() {
         System.out.println("Digite o código da consulta: ");
-        int codigoConsulta = scanner.nextInt();
-        // Lógica adicional para obter a consulta a partir do código
-
         Consulta consulta = new Consulta(/* parâmetros da consulta */);
         controller.cancelarConsulta(consulta);
 

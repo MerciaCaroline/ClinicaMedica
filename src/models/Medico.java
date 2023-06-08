@@ -5,9 +5,9 @@ public class Medico extends Usuario{
     private String telefone;
     private String registroCrm;
 
-    // Construtor, getters e setters
+    // Construtores
     public Medico() {
-        super(null, null, null);
+        super();
     }
     
     public Medico(String usuario, String senha, String nome, String especialidade, String registroCrm) {
@@ -24,22 +24,49 @@ public class Medico extends Usuario{
         this.registroCrm = registroCrm;
     }
 
-    // Getters
-    public String getRegistroCrm() {
-        return registroCrm;
+    // Getters e Setters
+    public String getUsuario() {
+        return this.usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        if (usuario.length() > 0) {
+            this.usuario = usuario;
+        }
+    }
+
+    public String getSenha() {
+        return this.senha;
+    }
+
+    public void setSenha(String senha) {
+        if (senha.length() > 0) {
+            this.senha = senha;
+        }
+    }
+
+    public String getNome() {
+        return this.nome;
+    }
+
+    public void setNome(String nome) {
+        if (nome.length() > 0) {
+            this.nome = nome;
+        }
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        if (id > 0) {
+            this.id = id;
+        }
     }
 
     public String getEspecialidade() {
         return this.especialidade;
-    }
-
-    public String getTelefone() {
-        return this.telefone;
-    }
-
-    //Setters
-    public void setRegistroCrm(String registroCrm) {
-        this.registroCrm = registroCrm;
     }
 
     public void setEspecialidade(String especialidade) {
@@ -48,9 +75,21 @@ public class Medico extends Usuario{
         }
     }
 
+    public String getTelefone() {
+        return this.telefone;
+    }
+
     public void setTelefone(String telefone) {
         if (telefone.length() > 0) {
             this.telefone = telefone;
         }
+    }
+
+    public String getRegistroCrm() {
+        return registroCrm;
+    }
+
+    public void setRegistroCrm(String registroCrm) {
+        this.registroCrm = registroCrm;
     }
 }

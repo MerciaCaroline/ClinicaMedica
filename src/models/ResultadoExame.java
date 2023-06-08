@@ -4,58 +4,85 @@ import java.util.Date;
 
 public class ResultadoExame {
     private int id;
-    private Paciente paciente;
-    private Medico medico;
+    private int pacienteId;
+    private int medicoId;
+    private int exameId;
     private String tipo;
     private Date dataResultado;
     private String resultado;
 
-    // Construtor, getters e setters
+    // Construtores
+    public ResultadoExame() {
+        super();
+    }
+
+    public ResultadoExame(int pacienteId, int medicoId, int exameId, String tipo, Date dataResultado, String resultado) {
+        this.pacienteId = pacienteId;
+        this.medicoId = medicoId;
+        this.exameId = exameId;
+        this.tipo = tipo;
+        this.dataResultado = dataResultado;
+        this.resultado = resultado;
+    }
+    
+    // Getters e setters
     public int getId() {
         return this.id;
-    }
-
-    public Paciente getPaciente() {
-        return this.paciente;
-    }
-
-    public Medico getMedico() {
-        return this.medico;
-    }
-
-    public String getTipo() {
-        return this.tipo;
-    }
-
-    public Date getDataResultado() {
-        return this.dataResultado;
-    }
-
-    public String getResultado() {
-        return this.resultado;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
+    public int getPaciente() {
+        return this.pacienteId;
     }
 
-    public void setMedico(Medico medico) {
-        this.medico = medico;
+    public void setPaciente(int pacienteId) {
+        this.pacienteId = pacienteId;
+    }
+
+    public int getMedico() {
+        return this.medicoId;
+    }
+
+    public void setMedico(int medicoId) {
+        this.medicoId = medicoId;
+    }
+
+    public int getExame() {
+        return this.exameId;
+    }
+
+    public void setExame(int exameId) {
+        this.exameId = exameId;
+    }
+
+    public String getTipo() {
+        return this.tipo;
     }
 
     public void setTipo(String tipo) {
-        this.tipo = tipo;
+        if (tipo.length() > 0) {
+            this.tipo = tipo;
+        }
+    }
+
+    public Date getDataResultado() {
+        return this.dataResultado;
     }
 
     public void setDataResultado(Date dataResultado) {
         this.dataResultado = dataResultado;
     }
 
+    public String getResultado() {
+        return this.resultado;
+    }
+
     public void setResultado(String resultado) {
-        this.resultado = resultado;
+        if (resultado.length() > 0) {
+            this.resultado = resultado;
+        }
     }
 }

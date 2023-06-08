@@ -3,26 +3,26 @@ package views;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 // Pacote visão (View)
 
-import java.util.List;
 import java.util.Scanner;
 
 import controllers.MedicoController;
 import controllers.PacienteController;
-import models.Exame;
 import models.Paciente;
+import models.ResultadoExame;
 
 public class MedicoView {
     private MedicoController controller;
+    private PacienteController pacienteController;
     private Scanner scanner;
     private SimpleDateFormat formato;
     
     // Construtor
     public MedicoView(MedicoController controller) {
         this.controller = controller;
+        this.pacienteController = new PacienteController();
         this.scanner = new Scanner(System.in);
         formato = new SimpleDateFormat("dd/MM/yyyy"); 
     }
@@ -49,7 +49,7 @@ public class MedicoView {
                     registrarHistoricoPaciente();
                     break;
                 case 3:
-                    receberResultadoExames();
+                    receberResultadoExame();
                     break;
                 case 4:
                     System.out.println("Saindo do menu do médico...");
@@ -103,22 +103,21 @@ public class MedicoView {
         }
     }
 
-    public void receberResultadoExames() throws SQLException{
-        System.out.println("Digite o código do médico: ");
-        int codigoMedico = scanner.nextInt();
+    public void receberResultadoExame() throws SQLException{
+        System.out.println("Digite o código do exame: ");
+        int exameId = scanner.nextInt();
 
-        List<Exame> resultadoExames = controller.consultarResultadosExames(codigoMedico);
+        ResultadoExame resultadoExame = controller.consultarResultadoExame(exameId);
 
-        if(resultadoExames != null){
-            System.out.println("=== RESULTADOS DE EXAMES ===");
-            for (Exame exame : resultadoExames) {
-                System.out.println("Tipo: " + exame.getTipo());
-                System.out.println("Autorizado: " + exame.getAutorizado());
-                System.out.println("Data: " + formato.format(exame.getData()));
-                System.out.println("Médico: " + exame.getMedico().getNome());
-                System.out.println("Paciente: " + exame.getPaciente().getNome());
-                System.out.println("===================================\n");
-            }
+        if(resultadoExame != null){
+            System.out.println("======== RESULTADOS DO EXAME ========");
+            System.out.println("Tipo: " + resultadoExame.getTipo());
+            System.out.println("Data Resultado: " + formato.format(resultadoExame.getDataResultado()));
+            System.out.println("Médico: " + controller.buscarMedicoPorId(resultadoExame.getMedico()));
+            System.out.println("Paciente: " + pacienteController.buscarPaciente(resultadoExame.getPaciente()));
+            System.out.println("Resultado:" + resultadoExame.getResultado());
+            System.out.println("====================================\n");
+            
         }
     }
 }

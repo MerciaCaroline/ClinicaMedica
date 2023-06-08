@@ -1,18 +1,22 @@
 package controllers;
 
 import java.sql.SQLException;
-import java.util.List;
 
-import models.Exame;
+import dataaccess.MedicoDAO;
+import models.Medico;
 import models.Paciente;
+import models.ResultadoExame;
 
 public class MedicoController {
-    ExameController exameController;
-    PacienteController pacienteController;
+    public ExameController exameController;
+    public ResultadoExameController resultadoExameController;
+    public PacienteController pacienteController;
+    private MedicoDAO medicoDAO;
 
      public MedicoController() {
         exameController = new ExameController();
         pacienteController = new PacienteController();
+        medicoDAO = new MedicoDAO();
     }
 
     public boolean autorizarExame(int codigo) throws SQLException {
@@ -39,7 +43,15 @@ public class MedicoController {
         return false;
     }
 
-    public List<Exame> consultarResultadosExames(int medicoId) throws SQLException {
-        return exameController.buscarResultadoExames(medicoId);
+    public ResultadoExame consultarResultadoExame(int examameId) throws SQLException {
+        return resultadoExameController.disponibilizarResultadoExame(examameId);
+    }
+
+    public Medico buscarMedicoPorNome(String nome) throws SQLException {
+        return medicoDAO.buscarPorNome(nome);
+    }
+
+    public Medico buscarMedicoPorId(int id) throws SQLException {
+        return medicoDAO.buscarPorId(id);
     }
 }

@@ -86,18 +86,18 @@ public class App {
     }
 
     public static boolean fazerLogin() {
-        Scanner scanner = new Scanner(System.in);
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.print("Usuário: ");
+            String usuario = scanner.nextLine();
+            System.out.print("Senha: ");
+            String senha = scanner.nextLine();
 
-        System.out.print("Usuário: ");
-        String usuario = scanner.nextLine();
-        System.out.print("Senha: ");
-        String senha = scanner.nextLine();
+            // Verifique as credenciais do usuário e senha
+            // Neste exemplo, faremos uma verificação simples com valores fixos
+            String usuarioCorreto = "admin";
+            String senhaCorreta = "123456";
 
-        // Verifique as credenciais do usuário e senha
-        // Neste exemplo, faremos uma verificação simples com valores fixos
-        String usuarioCorreto = "admin";
-        String senhaCorreta = "123456";
-
-        return usuario.equals(usuarioCorreto) && senha.equals(senhaCorreta);
+            return usuario.equals(usuarioCorreto) && senha.equals(senhaCorreta);
+        }
     }
 }

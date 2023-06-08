@@ -8,10 +8,7 @@ import models.Paciente;
 import models.ResultadoExame;
 
 public class LaboratorioController {
-    private static Laboratorio _laboratorio;
-
     public LaboratorioController(Laboratorio laboratorio) {
-        _laboratorio = laboratorio;
     }
 
     public void enviarResultadoExame(ResultadoExame resultadoExame, Medico medico) {
