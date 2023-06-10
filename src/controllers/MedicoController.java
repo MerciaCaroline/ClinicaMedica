@@ -1,5 +1,6 @@
 package controllers;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import dataaccess.MedicoDAO;
@@ -12,24 +13,21 @@ public class MedicoController {
     public ResultadoExameController resultadoExameController;
     public PacienteController pacienteController;
     private MedicoDAO medicoDAO;
+    private Connection connection;
 
-     public MedicoController() {
+     public MedicoController(Connection connection) {
+        exameController = new ExameController();
+        pacienteController = new PacienteController();
+        medicoDAO = new MedicoDAO();
+        this.connection = connection;
+    }
+
+    public MedicoController() {
         exameController = new ExameController();
         pacienteController = new PacienteController();
         medicoDAO = new MedicoDAO();
     }
-
-    public boolean autorizarExame(int codigo) throws SQLException {
-        if(exameController.buscarExame(codigo) != null){
-            exameController.buscarExame(codigo).setAutorizado(true);
-            exameController.atualizarExame(exameController.buscarExame(codigo));
-
-            return true;
-        }
-
-        return false;
-    }
-
+    
     public boolean registrarHistoricoPaciente(String nomePaciente, String historicoPaciente) throws SQLException {
         Paciente paciente = pacienteController.buscarPacientePorNome(nomePaciente);
         

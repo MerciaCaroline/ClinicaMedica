@@ -1,5 +1,6 @@
 package controllers;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -18,6 +19,11 @@ public class PacienteController {
     private List<Consulta> consultas;
     private List<ResultadoExame> resultadosExames;
     private PacienteDAO pacienteDAO;
+    private Connection connection;
+
+    public PacienteController(Connection connection) {
+        this.connection = connection;
+    }
 
     public PacienteController() {
         super();
@@ -36,7 +42,7 @@ public class PacienteController {
     }
 
     public Paciente buscarPaciente(int id) throws SQLException{
-        return pacienteDAO.ler(id);
+        return pacienteDAO.buscarPorId(id);
     }
 
     public List<Paciente> buscarTodosPacientes() throws SQLException{

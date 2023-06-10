@@ -1,5 +1,6 @@
 package controllers;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import dataaccess.RecepcionistaDAO;
@@ -13,6 +14,11 @@ public class RecepcionistaController {
     private RecepcionistaDAO recepcionistaDAO;
     private MedicoDAO medicoDAO;
     private PacienteDAO pacienteDAO;
+    private Connection connection;
+
+    public RecepcionistaController(Connection connection) {
+        this.connection = connection;
+    }
 
     public RecepcionistaController(RecepcionistaDAO recepcionistaDAO) {
         this.recepcionistaDAO = recepcionistaDAO;

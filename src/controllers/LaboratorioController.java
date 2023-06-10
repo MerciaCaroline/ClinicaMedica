@@ -1,14 +1,17 @@
 package controllers;
 
+import java.sql.Connection;
 import java.util.List;
 
-import models.Laboratorio;
 import models.Medico;
 import models.Paciente;
 import models.ResultadoExame;
 
 public class LaboratorioController {
-    public LaboratorioController(Laboratorio laboratorio) {
+    Connection connection;
+    
+    public LaboratorioController(Connection connection) {
+        this.connection = connection;
     }
 
     public void enviarResultadoExame(ResultadoExame resultadoExame, Medico medico) {

@@ -1,5 +1,6 @@
 package controllers;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -11,9 +12,24 @@ import models.ResultadoExame;
 
 public class ExameController {
     private static ExameDAO exameDAO;
+    private Connection connection;
+
+
+    public ExameController(Connection connection) {
+        this.connection = connection;
+        this.exameDAO = new ExameDAO(connection);
+    }
 
     public ExameController() {
         super();
+    }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 
     // CRUD
@@ -27,10 +43,6 @@ public class ExameController {
 
     public List<Exame> buscarTodosExames() throws SQLException{
         return exameDAO.buscarTodos();
-    }
-
-    public List<Exame> buscarResultadoExames(int medicoId) throws SQLException{
-        return exameDAO.buscarResultadoExames(medicoId);
     }
 
     public void atualizarExame(Exame exame) throws SQLException{
