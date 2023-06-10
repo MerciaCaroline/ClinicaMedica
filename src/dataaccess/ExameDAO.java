@@ -35,7 +35,7 @@ public class ExameDAO {
     }
 
     public Exame buscarPorId(int id) throws SQLException {
-        String sql = "SELECT * FROM exame WHERE id = ?";
+        String sql = "SELECT * FROM \"Exame\" WHERE id = ?";
 
         Exame exame = null;
 
@@ -45,6 +45,13 @@ public class ExameDAO {
                 if (resultSet.next()) {
                     exame = criarExame(resultSet);
                 }
+                else{
+                    return null;
+                }
+            }
+            catch (Exception e) {
+                System.out.println(e);
+                //erro
             }
         }
 

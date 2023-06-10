@@ -39,12 +39,16 @@ public class PacienteView {
     public void receberResultadoExame() {
         System.out.println("Digite o código do resultado do exame: ");
         int codigoExame = scanner.nextInt();
-        
-        try {
-            ExameController exameControlle = new ExameController(connection);
-            Exame exame = exameControlle.buscarExame(codigoExame);
 
-            System.out.println("Resultado de exame recebido com sucesso: " + exame.getResultado());
+        try {
+            ExameController exameController = new ExameController(connection);
+            Exame exame = exameController.buscarExame(codigoExame);
+            if (exame != null) {
+                System.out.println("Resultado de exame recebido com sucesso: " + exame.getResultado());                
+            }
+            else{
+                System.out.println("Exame não encontrado, verifique o código informado.\n\n3");   
+            }
         } 
         catch (Exception e) {
             // TODO: handle exception
