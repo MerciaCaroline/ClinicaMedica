@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.Exame;
+import models.Laboratorio;
 
 public class ExameDAO {
     private static Connection connection;
@@ -18,14 +19,17 @@ public class ExameDAO {
     }
 
     public void inserir(Exame exame) throws SQLException {
-        String sql = "INSERT INTO exame (nome, descricao, preco) VALUES (?, ?, ?)";
+
+
+        String sql = "INSERT INTO Exame (paciente_id, medico_id, laboratorio_id, datasolicitacao, tipo) VALUES(?, ?, ?, ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, exame.getTipo());
-            statement.setBoolean(2, exame.getAutorizado());
-            statement.setDate(3, (Date) exame.getData());
-            statement.setInt(4, exame.getMedico().getId());
-            statement.setInt(5, exame.getPaciente().getId());
+            statement.setInt(1, exame.getPaciente().getId());
+            statement.setInt(2, exame.getMedico().getId());
+            statement.setInt(3, exame.getLaboratorio().getId());
+            statement.setDate(4, new java.sql.Date(exame.getDataSolicitacao().getTime()));
+            statement.setString(5, exame.getTipo());
+
             statement.executeUpdate();
         }
     }
@@ -39,13 +43,7 @@ public class ExameDAO {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    exame = new Exame();
-                    exame.setId(resultSet.getInt("id"));
-                    exame.setTipo(resultSet.getString("tipo"));
-                    exame.setAutorizado(resultSet.getBoolean("autorizado"));
-                    exame.setData(resultSet.getDate("data"));
-                    exame.setMedico(new MedicoDAO(connection).buscarPorId(resultSet.getInt("medico_id")));
-                    exame.setPaciente(new PacienteDAO(connection).buscarPorId(resultSet.getInt("paciente_id")));
+                    exame = criarExame(resultSet);
                 }
             }
         }
@@ -61,13 +59,7 @@ public class ExameDAO {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    Exame exame = new Exame();
-                    exame.setId(resultSet.getInt("id"));
-                    exame.setTipo(resultSet.getString("tipo"));
-                    exame.setAutorizado(resultSet.getBoolean("autorizado"));
-                    exame.setData(resultSet.getDate("data"));
-                    exame.setMedico(new MedicoDAO(connection).buscarPorId(resultSet.getInt("medico_id")));
-                    exame.setPaciente(new PacienteDAO(connection).buscarPorId(resultSet.getInt("paciente_id")));
+                    Exame exame = criarExame(resultSet);
                     exames.add(exame);
                 }
             }
@@ -76,8 +68,8 @@ public class ExameDAO {
         return exames;
     }
 
-    public List<Exame> buscarResultadoExames(int medicoId){
-        String sql = "SELECT * FROM exame WHERE medico_id = $medicoId AND autorizado = true";
+    public List<Exame> buscarPorMedico(int medicoId){
+        String sql = "SELECT * FROM exame WHERE medico_id = ?";
 
         List<Exame> exames = new ArrayList<>();
 
@@ -85,13 +77,7 @@ public class ExameDAO {
             statement.setInt(1, medicoId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    Exame exame = new Exame();
-                    exame.setId(resultSet.getInt("id"));
-                    exame.setTipo(resultSet.getString("tipo"));
-                    exame.setAutorizado(resultSet.getBoolean("autorizado"));
-                    exame.setData(resultSet.getDate("data"));
-                    exame.setMedico(new MedicoDAO(connection).buscarPorId(resultSet.getInt("medico_id")));
-                    exame.setPaciente(new PacienteDAO(connection).buscarPorId(resultSet.getInt("paciente_id")));
+                    Exame exame = criarExame(resultSet);
                     exames.add(exame);
                 }
             }
@@ -103,15 +89,11 @@ public class ExameDAO {
     }
 
     public void atualizar(Exame exame) throws SQLException {
-        String sql = "UPDATE exame SET nome = ?, descricao = ?, preco = ? WHERE id = ?";
+        String sql = "UPDATE exame SET resultado = ? WHERE id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, exame.getTipo());
-            statement.setBoolean(2, exame.getAutorizado());
-            statement.setDate(3, (Date) exame.getData());
-            statement.setInt(4, exame.getMedico().getId());
-            statement.setInt(5, exame.getPaciente().getId());
-            statement.setInt(6, exame.getId());
+            statement.setString(1, exame.getResultado());
+            statement.setInt(2, exame.getId());
             statement.executeUpdate();
         }
     }
@@ -123,5 +105,22 @@ public class ExameDAO {
             statement.setInt(1, id);
             statement.executeUpdate();
         }
+    }
+
+    private Exame criarExame(ResultSet resultSet) throws SQLException{
+        
+        Exame exame = new Exame();
+        exame.setId(resultSet.getInt("id"));
+        exame.setTipo(resultSet.getString("tipo"));
+        exame.setDataSolicitacao(resultSet.getDate("datasolicitacao"));
+        exame.setDataResultado(resultSet.getDate("dataresultado"));
+        exame.setResultado(resultSet.getString("resultado"));
+        exame.setDisponivelOnline(resultSet.getBoolean("disponivelonline"));
+        exame.setEntreguePaciente(resultSet.getBoolean("entreguepaciente"));
+        exame.setMedico(new MedicoDAO(connection).buscarPorId(resultSet.getInt("medico_id")));
+        exame.setPaciente(new PacienteDAO(connection).buscarPorId(resultSet.getInt("paciente_id")));
+        //exame.setLaboratorio(new LaboratorioDAO(connection).buscarPorId(resultSet.getInt("laboratorio_id")));
+
+        return exame;
     }
 }

@@ -30,10 +30,10 @@ public class PacienteDAO {
         }
     }
 
-    public Paciente ler(int id) throws SQLException {
-        String query = "SELECT * FROM pacientes WHERE id = ?";
+    public Paciente buscarPorCpf(int cpf) throws SQLException {
+        String query = "SELECT * FROM pacientes WHERE cpf = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, id);
+            statement.setInt(1, cpf);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return criarPaciente(resultSet);
@@ -88,18 +88,11 @@ public class PacienteDAO {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String usuario = resultSet.getString("usuario");
-                    String senha = resultSet.getString("senha");
-                    String nome = resultSet.getString("nome");
-                    String endereco = resultSet.getString("endereco");
-                    String telefone = resultSet.getString("telefone");
-
-                    paciente = new Paciente(id, usuario, senha, nome, endereco, telefone);
+                    paciente = criarPaciente(resultSet);
                 }
             }
         }
-
+        
         return paciente;
     }
 
@@ -118,8 +111,11 @@ public class PacienteDAO {
         String usuario = resultSet.getString("usuario");
         String senha = resultSet.getString("senha");
         String endereco = resultSet.getString("endereco");
+        char sexo = resultSet.getString("sexo").charAt(0);
+        int idade = resultSet.getInt("idade");
+        String email = resultSet.getString("email");
 
-        return new Paciente(id, usuario, senha, nome, telefone, endereco);
+        return new Paciente(id, usuario, senha, nome, telefone, endereco, sexo, idade, email);
     }
 }
 
