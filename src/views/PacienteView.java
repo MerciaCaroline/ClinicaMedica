@@ -1,28 +1,19 @@
 package views;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
+import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-import controllers.MedicoController;
-import controllers.PacienteController;
-import models.Consulta;
-import models.Medico;
-import models.ResultadoExame;
+import controllers.ExameController;
+import models.Exame;
 
 public class PacienteView {
-    private PacienteController controller;
-    private MedicoController medicoController;
     private Scanner scanner;
+    private Connection connection;
 
-    public PacienteView(PacienteController controller) {
-        this.controller = controller;
-        this.medicoController = new MedicoController();
+    public PacienteView(Connection connection) {
         this.scanner = new Scanner(System.in);
+        this.connection = connection;
     }
 
     public void exibirMenuPaciente() throws ParseException, SQLException {
@@ -30,120 +21,33 @@ public class PacienteView {
 
         do {
             System.out.println("=== MENU DO PACIENTE ===");
-            System.out.println("1. Marcar consulta");
-            System.out.println("2. Receber resultado de exame");
-            System.out.println("3. Cancelar consulta");
-            System.out.println("4. Consultar consultas marcadas");
-            System.out.println("5. Consultar resultados de exames");
-            System.out.println("6. Solicitar exames");
-            System.out.println("7. Autorizar exames online");
-            System.out.println("8. Sair");
+            System.out.println("1. Consultar resultados de exames");
+            System.out.println("2. Sair");
             System.out.println("Digite a opção desejada: ");
             opcao = scanner.nextInt();
 
             switch (opcao) {
                 case 1:
-                    marcarConsulta();
-                    break;
-                case 2:
                     receberResultadoExame();
-                    break;
-                case 3:
-                    cancelarConsulta();
-                    break;
-                case 4:
-                    consultarConsultas();
-                    break;
-                case 5:
-                    consultarResultadosExames();
-                    break;
-                case 6:
-                    solicitarExames();
-                    break;
-                case 7:
-                    autorizarExamesOnline();
-                    break;
-                case 8:
-                    System.out.println("Saindo do menu do paciente...");
                     break;
                 default:
                     System.out.println("Opção inválida! Tente novamente.");
             }
-        } while (opcao != 8);
-    }
-
-    public void marcarConsulta() throws ParseException, SQLException {
-        System.out.println("Digite o nome do médico: ");
-        String nomeMedico = scanner.next();
-        Medico medico = medicoController.buscarMedicoPorNome(nomeMedico);
-        // Lógica adicional para obter o médico a partir do nome
-
-        System.out.println("Digite a data da consulta (dd/mm/aaaa): ");
-        String dataStr = scanner.next();
-
-        System.out.println("Digite ohorário da consulta (dd/mm/aaaa): ");
-        String horarioStr = scanner.next();
-
-        System.out.println("Digite a descrição da consulta: ");
-        String descricao = scanner.next();
-
-        Date dataConsulta = new SimpleDateFormat("dd/MM/yyyy").parse(dataStr);
-        Time horarioConsulta = (Time) new SimpleDateFormat("HH:mm").parse(horarioStr);
-        controller.marcarConsulta(medico, dataConsulta, horarioConsulta, descricao); 
-
-        System.out.println("Consulta marcada com sucesso.");
+        } while (opcao != 2);
     }
 
     public void receberResultadoExame() {
         System.out.println("Digite o código do resultado do exame: ");
-        ResultadoExame resultadoExame = new ResultadoExame(/* parâmetros do resultado do exame */);
-        controller.receberResultadoExame(resultadoExame);
+        int codigoExame = scanner.nextInt();
+        
+        try {
+            ExameController exameControlle = new ExameController(connection);
+            Exame exame = exameControlle.buscarExame(codigoExame);
 
-        System.out.println("Resultado de exame recebido com sucesso.");
-    }
-
-    public void cancelarConsulta() {
-        System.out.println("Digite o código da consulta: ");
-        Consulta consulta = new Consulta(/* parâmetros da consulta */);
-        controller.cancelarConsulta(consulta);
-
-        System.out.println("Consulta cancelada com sucesso.");
-    }
-
-    public void consultarConsultas() {
-        List<Consulta> consultas = controller.consultarConsultas();
-
-        if (consultas.isEmpty()) {
-            System.out.println("Nenhuma consulta encontrada.");
-        } else {
-            System.out.println("=== CONSULTAS MARCADAS ===");
-            for (Consulta consulta : consultas) {
-                System.out.println(consulta);
-            }
+            System.out.println("Resultado de exame recebido com sucesso: " + exame.getResultado());
+        } 
+        catch (Exception e) {
+            // TODO: handle exception
         }
-    }
-
-    public void consultarResultadosExames() {
-        List<ResultadoExame> resultadosExames = controller.consultarResultadosExames();
-
-        if (resultadosExames.isEmpty()) {
-            System.out.println("Nenhum resultado de exame encontrado.");
-        } else {
-            System.out.println("=== RESULTADOS DE EXAMES ===");
-            for (ResultadoExame resultadoExame : resultadosExames) {
-                System.out.println(resultadoExame);
-            }
-        }
-    }
-
-    public void solicitarExames() {
-        // Lógica para solicitar exames
-        // Código adicional para criar e enviar solicitações de exames
-        System.out.println("Exames solicitados com sucesso.");
-    }
-
-    public void autorizarExamesOnline() {
-        controller.autorizarExamesOnline();
-        System.out.println("Exames autorizados para disponibilidade online.");
     }
 }
