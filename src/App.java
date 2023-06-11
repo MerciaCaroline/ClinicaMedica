@@ -4,8 +4,10 @@ import java.util.Scanner;
 
 import controllers.LaboratorioController;
 import controllers.MedicoController;
-import controllers.PacienteController;
 import controllers.RecepcionistaController;
+import models.Laboratorio;
+import models.Medico;
+import models.Usuario;
 import views.LaboratorioView;
 import views.MedicoView;
 import views.PacienteView;
@@ -28,6 +30,9 @@ public class App {
                 System.out.println("Escolha uma função:\n1 - Paciente\n2 - Médico\n3 - Recepcionista\n4 - Laboratório\n\n");
     
                 int escolha = scanner.nextInt();
+                scanner.nextLine(); //limpar o buffer
+                
+                Usuario usuario = null;
     
                 switch (escolha) {
                     case 1:
@@ -43,11 +48,17 @@ public class App {
                     case 2:
                         System.out.println("Você escolheu a função: Médico");
 
-                        if (fazerLogin(2, connection)) {
+                        usuario = fazerLogin(2, connection);
+
+                        if ( usuario != null) {
+
                             System.out.println("Login bem-sucedido! Acesso concedido.");
-                            MedicoView medicoView = new MedicoView(connection);
+                            MedicoController medicoController = new MedicoController(connection);
+                            Medico medico = medicoController.buscarMedicoPorId(usuario.getId());
+                        
+                            MedicoView medicoView = new MedicoView(connection, medico);
                             try {
-                                medicoView.exibirMenuMedico();                            
+                                medicoView.exibirMenuMedico();                 
                             } 
                             catch (Exception e) {
 
@@ -62,7 +73,9 @@ public class App {
                     case 3:
                         System.out.println("Você escolheu a função: Recepcionista");
 
-                        if (fazerLogin(3, connection)) {
+                        usuario = fazerLogin(3, connection);
+
+                        if ( usuario != null) {
                             System.out.println("Login bem-sucedido! Acesso concedido.");
                             RecepcionistaView recepcionistaView = new RecepcionistaView(connection);
                             try {
@@ -81,10 +94,14 @@ public class App {
                     case 4:
                         System.out.println("Você escolheu a função: Laboratório");
 
-                        if (fazerLogin(4, connection)) {
+                        usuario = fazerLogin(4, connection);
+
+                        if ( ( usuario != null)) {
                             System.out.println("Login bem-sucedido! Acesso concedido.");
                             LaboratorioController laboratorioController = new LaboratorioController(connection);
-                            LaboratorioView LaboratorioView = new LaboratorioView(laboratorioController);
+                            Laboratorio laboratorio = laboratorioController.buscarPorId(usuario.getId());
+                        
+                            LaboratorioView LaboratorioView = new LaboratorioView(connection, laboratorio);
                             try {
                                 LaboratorioView.exibirMenu();                 
                             } 
@@ -94,7 +111,7 @@ public class App {
                             }
                         } 
                         else {
-                            System.out.println("Falha no login! Acesso negado.");
+                            System.out.println("Falha no login! Acesso negado.\n");
                             // Faça algo após a falha no login
                         }
                         break;
@@ -116,7 +133,7 @@ public class App {
         }        
     }
 
-    public static boolean fazerLogin(int tipoUsuario, Connection connection) {
+    public static Usuario fazerLogin(int tipoUsuario, Connection connection) {
         try (Scanner scanner = new Scanner(System.in)) {
             System.out.println("Bem-vindo! Por favor, faça login.");
 
@@ -125,19 +142,52 @@ public class App {
             System.out.print("Senha: ");
             String senha = scanner.nextLine();
 
-            String usuarioFake = "admin";
-            String SenhaFake = "123456";
+            Usuario user = null;
 
             switch (tipoUsuario) {
                 case 2:
-                    //Acessar MEDICODAO para validar usuario e senha
-                    return usuario.equals(usuarioFake) && senha.equals(SenhaFake);
+                    try {
+                        MedicoController medicoController = new MedicoController(connection);
+                        user = medicoController.buscarMedicoPorUsuario(usuario);
+                    } 
+                    catch (Exception e) {
+                        // TODO: handle exception
+                    }
+                    break;
                 case 3:
-                    //Acessar RECEPCIONISTADAO para validar usuario e senha
-                    return usuario.equals(usuarioFake) && senha.equals(SenhaFake);
+                    try {
+                        RecepcionistaController recepcionistaController = new RecepcionistaController(connection);
+                        user = recepcionistaController.buscarPorUsuario(usuario);
+                    }
+                    catch (Exception e) {
+                        // TODO: handle exception
+                    }
+                    break;
+                case 4:
+                    try {
+                        LaboratorioController laboratorioController = new LaboratorioController(connection);
+                        user = laboratorioController.buscarPorUsuario(usuario);
+                    }
+                    catch (Exception e) {
+                        // TODO: handle exception
+                    }
+                    break;
                 default:
-                    return false;
+                    return null;
             }
+            scanner.close();
+
+            if (user != null) {
+                var senhaCadastrada = user.getSenha();
+                if(senha.equals(senhaCadastrada)){
+                    return user;
+                }
+                else{
+                    System.out.print("Senha digitada nao confere.\n");
+                }
+            } 
+            System.out.print("Usuario não encontrado\n");
+            return null;
         }
     }
 }

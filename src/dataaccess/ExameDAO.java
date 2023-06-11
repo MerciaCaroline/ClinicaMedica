@@ -1,7 +1,6 @@
 package dataaccess;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.Exame;
-import models.Laboratorio;
 
 public class ExameDAO {
     private static Connection connection;
@@ -19,15 +17,12 @@ public class ExameDAO {
     }
 
     public void inserir(Exame exame) throws SQLException {
-
-
-        String sql = "INSERT INTO Exame (paciente_id, medico_id, laboratorio_id, datasolicitacao, tipo) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Exame (paciente_id, medico_id, laboratorio_id, datasolicitacao, tipo) VALUES(?, ?, ?, CURRENT_DATE, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, exame.getPaciente().getId());
             statement.setInt(2, exame.getMedico().getId());
             statement.setInt(3, exame.getLaboratorio().getId());
-            statement.setDate(4, new java.sql.Date(exame.getDataSolicitacao().getTime()));
             statement.setString(5, exame.getTipo());
 
             statement.executeUpdate();
@@ -59,7 +54,7 @@ public class ExameDAO {
     }
 
     public List<Exame> buscarTodos() throws SQLException {
-        String sql = "SELECT * FROM exame";
+        String sql = "SELECT * FROM \"Exame\" ";
 
         List<Exame> exames = new ArrayList<>();
 
@@ -76,7 +71,7 @@ public class ExameDAO {
     }
 
     public List<Exame> buscarPorMedico(int medicoId){
-        String sql = "SELECT * FROM exame WHERE medico_id = ?";
+        String sql = "SELECT * FROM \"Exame\" WHERE medico_id = ?";
 
         List<Exame> exames = new ArrayList<>();
 
@@ -95,12 +90,43 @@ public class ExameDAO {
         return exames;
     }
 
-    public void atualizar(Exame exame) throws SQLException {
-        String sql = "UPDATE exame SET resultado = ? WHERE id = ?";
+    public List<Exame> buscarPorLaboratorio(int laboratorio_id){
+        String sql = "SELECT * FROM \"Exame\" WHERE laboratorio_id = ?";
+
+        List<Exame> exames = new ArrayList<>();
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, laboratorio_id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Exame exame = criarExame(resultSet);
+                    exames.add(exame);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return exames;
+    }
+
+    public void inserirResultado(Exame exame) throws SQLException {
+        String sql = "UPDATE exame SET resultado = ? , dataresultado = CURRENT_DATE WHERE id = ?";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, exame.getResultado());
             statement.setInt(2, exame.getId());
+            statement.executeUpdate();
+        }
+    }
+
+    public void atualizarFlags(int exameId, boolean disponivelOnline, boolean entreguePaciente) throws SQLException {
+        String sql = "UPDATE exame SET disponivelonline = ? , entreguePaciente = ? WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setBoolean(1, disponivelOnline);
+            statement.setBoolean(2, entreguePaciente);
+            statement.setInt(3, exameId);
             statement.executeUpdate();
         }
     }

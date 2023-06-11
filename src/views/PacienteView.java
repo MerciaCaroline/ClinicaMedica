@@ -45,10 +45,10 @@ public class PacienteView {
         try {
             ExameController exameController = new ExameController(connection);
             Exame exame = exameController.buscarExame(codigoExame);
-            if (exame != null) {
+            if (exame != null & exame.isDisponivelOnline()) {
                 System.out.println("Resultado de exame recebido com sucesso: " + exame.getResultado());                
             }
-            else{
+            else {
                 System.out.println("Exame não encontrado, verifique o código informado.\n\n3");   
             }
         } 

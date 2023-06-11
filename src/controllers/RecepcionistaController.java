@@ -9,6 +9,7 @@ import dataaccess.PacienteDAO;
 import models.Consulta;
 import models.Medico;
 import models.Paciente;
+import models.Recepcionista;
 
 public class RecepcionistaController {
     private RecepcionistaDAO recepcionistaDAO;
@@ -105,5 +106,17 @@ public class RecepcionistaController {
             System.out.println("Erro ao acessar o banco de dados.");
             return false;
         }
+    }
+
+    public Recepcionista buscarPorNome(String nome) throws SQLException {
+        return recepcionistaDAO.buscarPorNome(nome);
+    }
+
+    public Recepcionista buscarPorId(int id) throws SQLException {
+        return recepcionistaDAO.buscarPorId(id);
+    }
+
+    public Recepcionista buscarPorUsuario(String usuario) throws SQLException {
+        return recepcionistaDAO.buscarPorUsuario(usuario);
     }
 }

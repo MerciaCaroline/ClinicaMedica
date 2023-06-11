@@ -11,9 +11,8 @@ public class HistoricoPaciente {
     public HistoricoPaciente() {
     }
 
-    public HistoricoPaciente(Paciente paciente, Date data, String descricao) {
+    public HistoricoPaciente(Paciente paciente, String descricao) {
         this.paciente = paciente;
-        this.data = data;
         this.descricao = descricao;
     }
 

@@ -1,29 +1,31 @@
 package controllers;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
+import dataaccess.LaboratorioDAO;
+import models.Laboratorio;
 import models.Medico;
 import models.Paciente;
-import models.ResultadoExame;
 
 public class LaboratorioController {
     Connection connection;
+    LaboratorioDAO LaboratorioDAO;
     
     public LaboratorioController(Connection connection) {
         this.connection = connection;
     }
 
-    public void enviarResultadoExame(ResultadoExame resultadoExame, Medico medico) {
-        // Lógica para enviar o resultado do exame para o médico
+    public Laboratorio buscarPorId(int id) throws SQLException {
+        return LaboratorioDAO.buscarPorId(id);
     }
 
-    public List<ResultadoExame> consultarResultadosExames() {
-        // Lógica para consultar os resultados de exames enviados pelo laboratório
-        return null;
+    public Laboratorio buscarPorUsuario(String usuario) throws SQLException {
+        return LaboratorioDAO.buscarPorUsuario(usuario);
     }
-    
-    public void enviarResultadoExame(ResultadoExame resultadoExame, Medico medico, Paciente paciente) {
-        // Lógica para enviar o resultado do exame diretamente ao médico ou ao paciente
+
+    public List<Laboratorio> buscarTodos() throws SQLException{
+        return LaboratorioDAO.buscarTodos();
     }
 }

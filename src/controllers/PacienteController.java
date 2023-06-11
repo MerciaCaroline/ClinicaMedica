@@ -6,38 +6,59 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import dataaccess.PacienteDAO;
 import models.Consulta;
 import models.Exame;
 import models.Medico;
 import models.Paciente;
-import models.ResultadoExame;
 
 public class PacienteController {
     private Paciente paciente;
     private List<Consulta> consultas;
-    private List<ResultadoExame> resultadosExames;
     private PacienteDAO pacienteDAO;
-    private Connection connection;
+    private Scanner scanner;
 
     public PacienteController(Connection connection) {
-        this.connection = connection;
-    }
-
-    public PacienteController() {
-        super();
+        this.pacienteDAO = new PacienteDAO(connection);
     }
 
     public PacienteController(Paciente paciente) {
         this.paciente = paciente;
         this.consultas = new ArrayList<>();
-        this.resultadosExames = new ArrayList<>();
-        this.pacienteDAO = new PacienteDAO();
+        this.scanner = new Scanner(System.in);
     }
 
     // CRUD
-    public void cadastrarPaciente(Paciente paciente) throws SQLException{
+    public void cadastrarPaciente(String nome) throws SQLException
+    {
+        System.out.println("\n Digite a idade: ");
+        int idade = scanner.nextInt();
+
+        System.out.println("\n Digite o cpf: ");
+        String cpf = scanner.nextLine();
+
+        System.out.println("\n Digite o telefone: ");
+        String telefone = scanner.nextLine();
+
+        System.out.println("\n Digite o email: ");
+        String email = scanner.nextLine();
+
+        System.out.println("\n Digite o endereco: ");
+        String endereco = scanner.nextLine();
+
+        System.out.println("\n Exolha o sexo (M) - Masculino, (F) - Feminino: ");
+        String sexo = scanner.nextLine();
+        
+        System.out.println("\n Escolha um usuario: ");
+        String usuario = scanner.nextLine();
+
+        System.out.println("\n Escolha uma senha: ");
+        String senha = scanner.nextLine();
+
+
+        Paciente paciente = new Paciente(usuario, senha, nome, telefone, cpf, sexo.charAt(0), email, idade, endereco);
         pacienteDAO.criar(paciente);
     }
 
@@ -66,21 +87,12 @@ public class PacienteController {
         Consulta consulta = new Consulta(paciente, medico, data, horarioConsulta, descricao);
         consultas.add(consulta);
     }
-
-    public void receberResultadoExame(ResultadoExame resultadoExame) {
-        resultadosExames.add(resultadoExame);
-    }
-
     public void cancelarConsulta(Consulta consulta) {
         consultas.remove(consulta);
     }
 
     public List<Consulta> consultarConsultas() {
         return consultas;
-    }
-
-    public List<ResultadoExame> consultarResultadosExames() {
-        return resultadosExames;
     }
 
     public List<Exame> solicitarExames(List<String> tiposExame) {

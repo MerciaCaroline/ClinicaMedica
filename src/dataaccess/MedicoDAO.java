@@ -34,23 +34,31 @@ public class MedicoDAO {
     }
 
     public Medico buscarPorId(int id) throws SQLException {
-        String sql = "SELECT * FROM medico WHERE id = ?";
-
+        String sql = "SELECT * FROM \"Medico\" WHERE id = ?";
         Medico medico = null;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
+                    medico = criarMedico(resultSet);
+                }
+            }
+        }
 
-                    String usuario = resultSet.getString("usuario");
-                    String senha = resultSet.getString("senha");
-                    String nome = resultSet.getString("nome");
-                    String especialidade = resultSet.getString("especialidade");
-                    String telefone = resultSet.getString("telefone");
-                    String registroCrm = resultSet.getString("registroCrm");
+        return medico;
+    }
 
-                    medico = new Medico(id, usuario, senha, nome, especialidade, telefone, registroCrm);
+    public Medico buscarPorUsuario(String usuario) throws SQLException {
+        String sql = "SELECT * FROM \"Medico\" WHERE usuario = ?";
+
+        Medico medico = null;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, usuario);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    medico = criarMedico(resultSet);
                 }
             }
         }
@@ -66,15 +74,7 @@ public class MedicoDAO {
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String usuario = resultSet.getString("usuario");
-                    String senha = resultSet.getString("senha");
-                    String nome = resultSet.getString("nome");
-                    String especialidade = resultSet.getString("especialidade");
-                    String telefone = resultSet.getString("telefone");
-                    String registroCrm = resultSet.getString("registroCrm");
-
-                    medico = new Medico(id, usuario, senha, nome, especialidade, telefone, registroCrm);
+                    medico = criarMedico(resultSet);
                 }
             }
         }
@@ -89,15 +89,7 @@ public class MedicoDAO {
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String usuario = resultSet.getString("usuario");
-                    String senha = resultSet.getString("senha");
-                    String nome = resultSet.getString("nome");
-                    String especialidade = resultSet.getString("especialidade");
-                    String telefone = resultSet.getString("telefone");
-                    String registroCrm = resultSet.getString("registroCrm");
-
-                Medico medico = new Medico(id, usuario, senha, nome, especialidade, telefone, registroCrm);
+                var medico = criarMedico(resultSet);
                 medicos.add(medico);
             }
         }
@@ -124,6 +116,18 @@ public class MedicoDAO {
             statement.setInt(1, id);
             statement.executeUpdate();
         }
+    }
+
+    private Medico criarMedico(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt("id");
+        String usuario = resultSet.getString("usuario");
+        String senha = resultSet.getString("senha");
+        String nome = resultSet.getString("nome");
+        String especialidade = resultSet.getString("especialidade");
+        String telefone = resultSet.getString("telefone");
+        String registroCrm = resultSet.getString("registroCrm");
+
+        return new Medico(id, usuario, senha, nome, especialidade, telefone, registroCrm);
     }
 
 }

@@ -1,19 +1,23 @@
 package views;
 
+import java.sql.Connection;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-
-import controllers.LaboratorioController;
-import models.ResultadoExame;
+import controllers.ExameController;
+import models.Exame;
+import models.Laboratorio;
 
 public class LaboratorioView {
     
     private Scanner scanner;
-    private LaboratorioController controller;
+    private ExameController exameController;
+    private Laboratorio laboratorio;
     
-    public LaboratorioView(LaboratorioController controller) {
+    public LaboratorioView(Connection connection, Laboratorio laboratorio) {
         scanner = new Scanner(System.in);
-        this.controller = controller;
+        this.exameController = new ExameController(connection);
+        this.laboratorio = laboratorio;
     }
     
     public void exibirMenu() {
@@ -31,12 +35,21 @@ public class LaboratorioView {
             
             switch (opcao) {
                 case 1:
-                    // pedir pra digitar os resultados e enviar;
-                    //controller.EnviarResultadoExame();
+                    this.exameController.enviarResultadoExame(laboratorio);
                     break;
                 case 2:
-                    List<ResultadoExame> resultados = controller.consultarResultadosExames();
-                    // exibir os resultados
+                    List<Exame> resultados = this.exameController.consultarResultadosExames(laboratorio);
+                    
+                    System.out.print("Exames enviados \n: ");
+
+                    for (Exame exame : resultados) {
+                        int id = exame.getId();
+                        String nomePaciente = exame.getPaciente().getNome(); 
+                        String tipo = exame.getTipo();
+                        Date dataResultado = exame.getDataResultado();
+                        String resultado = exame.getResultado();
+                        System.out.print(id + " | " +" | "+ tipo +" | " + nomePaciente + " | " + dataResultado + " | "+ resultado + "\n");
+                    }
                     break;
                 case 3:
                     System.out.println("Encerrando o programa.");

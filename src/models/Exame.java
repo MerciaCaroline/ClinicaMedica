@@ -15,12 +15,11 @@ public class Exame {
     private boolean disponivelOnline;
 
     // Construtor para solicitar exame
-    public Exame(Paciente paciente, Medico medico, Laboratorio laboratorio, String tipo, Date dataSolicitacao) {
+    public Exame(Paciente paciente, Medico medico, Laboratorio laboratorio, String tipo) {
         this.paciente = paciente;
         this.medico = medico;
         this.laboratorio = laboratorio;
         this.tipo = tipo;
-        this.dataSolicitacao = dataSolicitacao;
     }
     
     // Construtor completo
