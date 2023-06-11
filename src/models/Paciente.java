@@ -2,12 +2,46 @@ package models;
 
 public class Paciente extends Usuario {
     private String telefone;
+    private String cpf;
     private char sexo;
     private String email;
     private int idade;
     private String endereco;
     private String historicoPaciente;
 
+    // Construtores
+    public Paciente(){
+        super();
+    }
+
+    public Paciente(int id, String usuario, String senha, String nome, 
+            String telefone, String cpf, char sexo, 
+            String email, int idade, String endereco) {
+        super(usuario, senha, nome);
+        this.id = id;
+        this.telefone = telefone;
+        this.cpf = cpf;
+        this.sexo = sexo;
+        this.email = email;
+        this.idade = idade;
+        this.endereco = endereco;
+    }
+
+    public Paciente(String usuario, String senha, String nome, 
+            String telefone, String cpf, char sexo, 
+            String email, int idade, String endereco) {
+        super(usuario, senha, nome);
+        this.telefone = telefone;
+        this.cpf = cpf;
+        this.sexo = sexo;
+        this.email = email;
+        this.idade = idade;
+        this.endereco = endereco;
+    }
+
+    // Getters and Setters
+    
+    //remover
     public String getHistoricoPaciente() {
         return historicoPaciente;
     }
@@ -16,39 +50,6 @@ public class Paciente extends Usuario {
         this.historicoPaciente = historicoPaciente;
     }
 
-    // Construtores
-    public Paciente(){
-        super();
-    }
-
-    public Paciente(String nomePaciente) {
-        super();
-        this.nome = nomePaciente;
-    }
-
-    public Paciente(String usuario, String senha, String nome, 
-    String telefone, String endereco, char sexo, int idade, String email) {
-        super(usuario, senha, nome);
-        this.telefone = telefone;
-        this.endereco = endereco;
-        this.email = email;
-        this.idade= idade;
-        this.sexo = sexo;
-
-    }
-
-    public Paciente(int id, String usuario, String senha, String nome, String telefone, 
-        String endereco, char sexo, int idade, String email) {
-        super(usuario, senha, nome);
-        this.id = id;
-        this.telefone = telefone;
-        this.endereco = endereco;
-        this.email = email;
-        this.idade= idade;
-        this.sexo = sexo;
-    }
-
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -59,6 +60,14 @@ public class Paciente extends Usuario {
         }
     }
     
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
     public char getSexo() {
         return sexo;
     }

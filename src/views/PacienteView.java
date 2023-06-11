@@ -20,15 +20,17 @@ public class PacienteView {
         int opcao = 0;
 
         do {
-            System.out.println("=== MENU DO PACIENTE ===");
+            System.out.println("\n\n=== MENU DO PACIENTE ===");
             System.out.println("1. Consultar resultados de exames");
             System.out.println("2. Sair");
-            System.out.println("Digite a opção desejada: ");
+            System.out.println("\nDigite a opção desejada: ");
             opcao = scanner.nextInt();
 
             switch (opcao) {
                 case 1:
                     receberResultadoExame();
+                    break;
+                case 2:
                     break;
                 default:
                     System.out.println("Opção inválida! Tente novamente.");
@@ -37,7 +39,7 @@ public class PacienteView {
     }
 
     public void receberResultadoExame() {
-        System.out.println("Digite o código do resultado do exame: ");
+        System.out.println("\nDigite o código do resultado do exame: ");
         int codigoExame = scanner.nextInt();
 
         try {
