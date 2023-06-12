@@ -6,8 +6,6 @@ import java.util.List;
 
 import dataaccess.LaboratorioDAO;
 import models.Laboratorio;
-import models.Medico;
-import models.Paciente;
 
 public class LaboratorioController {
     Connection connection;

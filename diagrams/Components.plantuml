@@ -1,0 +1,54 @@
+@startuml
+	skinparam componentStyle uml2
+
+	title Clinica-Medica
+
+	package "Clinica - Medica" {
+
+        [Medico DAO] --0)-- [Medico Controller]
+        [Medico DAO] --0)-- [Exame DAO]
+        [Medico DAO] --0)-- [Recepcionista Controller]
+        
+        [Exame DAO] --0)-- [Exame Controller]
+
+        [Historico Paciente DAO] --0)-- [Medico Controller]
+
+        [Laboratorio DAO] --0)-- [Laboratorio Controller]
+
+        [Paciente DAO] --0)--[Paciente Controller]  
+        [Paciente DAO] --0)-- [Recepcionista Controller]  
+        [Paciente DAO] --0)-- [Exame DAO]  
+        [Paciente DAO] --0)-- [Historico Paciente DAO]  
+
+        [Recepcionista DAO] --0)-- [Recepcionista Controller]
+
+        [Consulta DAO] --0)-- [Consulta Controller]
+
+        [Recepcionista Controller] --0)-- [Recepcionista View]
+        [Recepcionista Controller] --0)-- [App]
+
+        [Laboratorio Controller] --0)-- [Laboratorio View]
+        [Laboratorio Controller] --0)-- [Medico View]
+        [Laboratorio Controller] --0)-- [App]
+
+        [Paciente Controller] --0)-- [Paciente View]
+        [Paciente Controller] --0)-- [Medico View]
+        [Paciente Controller] --0)-- [Medico Controller]
+
+        [Exame Controller] --0)-- [Laboratorio View]
+        [Exame Controller] --0)-- [Medico View]
+        [Exame Controller] --0)-- [Paciente View]
+        [Exame Controller] --0)-- [Medico Controller]
+
+        [Medico Controller] --0)-- [Medico View]
+        [Medico Controller] --0)-- [App]
+
+        [Consulta Controller] --0)--[Recepcionista Controller]
+
+        [Medico View] --0)-- [App]
+        [Laboratorio View] --0)-- [App]
+        [Recepcionista View] --0)-- [App]
+        [Paciente View] --0)-- [App]
+        		
+	}
+@enduml
