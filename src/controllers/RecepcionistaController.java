@@ -15,14 +15,11 @@ public class RecepcionistaController {
     private RecepcionistaDAO recepcionistaDAO;
     private MedicoDAO medicoDAO;
     private PacienteDAO pacienteDAO;
-    private Connection connection;
 
     public RecepcionistaController(Connection connection) {
-        this.connection = connection;
-    }
-
-    public RecepcionistaController(RecepcionistaDAO recepcionistaDAO) {
-        this.recepcionistaDAO = recepcionistaDAO;
+        this.recepcionistaDAO = new RecepcionistaDAO(connection);
+        this.medicoDAO = new MedicoDAO(connection);
+        this.pacienteDAO = new PacienteDAO(connection);
     }
 
     public boolean registrarPaciente(Paciente paciente) {

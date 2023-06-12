@@ -57,9 +57,9 @@ public class RecepcionistaView {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
  
-
+        scanner.nextLine();
         System.out.println("Digite o nome do médico: ");
-        String nomeMedico = scanner.next();
+        String nomeMedico = scanner.nextLine();
 
         // Buscar o médico no banco de dados
         Medico medico = recepcionistaController.buscarMedicoPorNome(nomeMedico);
@@ -69,8 +69,9 @@ public class RecepcionistaView {
         }
 
         // Solicitar informações do paciente
+        scanner.nextLine();
         System.out.println("Digite o nome do paciente: ");
-        String nomePaciente = scanner.next();
+        String nomePaciente = scanner.nextLine();
 
         // Buscar o paciente no banco de dados
         Paciente paciente = recepcionistaController.buscarPacientePorNome(nomePaciente);

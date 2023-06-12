@@ -14,11 +14,14 @@ import views.PacienteView;
 import views.RecepcionistaView;
 
 public class App {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        boolean sair = false;
+    private static Scanner scanner;
 
+    public static void main(String[] args) {
+        boolean sair = false;
+        int escolha;
         System.out.println("\nBem Vindo! \n\n");
+
+        scanner = new Scanner(System.in);
 
         try {
             PostgresDBConnection database = new PostgresDBConnection();
@@ -28,10 +31,9 @@ public class App {
 
             while (!sair) {
                 System.out.println("Escolha uma função:\n1 - Paciente\n2 - Médico\n3 - Recepcionista\n4 - Laboratório\n\n");
-    
-                int escolha = scanner.nextInt();
-                scanner.nextLine(); //limpar o buffer
                 
+                escolha = scanner.nextInt();
+                scanner.nextLine();
                 Usuario usuario = null;
     
                 switch (escolha) {
@@ -51,11 +53,9 @@ public class App {
                         usuario = fazerLogin(2, connection);
 
                         if ( usuario != null) {
-
                             System.out.println("Login bem-sucedido! Acesso concedido.");
                             MedicoController medicoController = new MedicoController(connection);
                             Medico medico = medicoController.buscarMedicoPorId(usuario.getId());
-                        
                             MedicoView medicoView = new MedicoView(connection, medico);
                             try {
                                 medicoView.exibirMenuMedico();                 
@@ -119,75 +119,72 @@ public class App {
                         System.out.println("Escolha inválida! Por favor, escolha um número de 1 a 4");
                         break;
                 }
+
                 System.out.println("Pressione '0' para sair ou qualquer outra tecla para continuar...");
                 String tecla = scanner.next();
                 if (tecla.equalsIgnoreCase("0")) {
                     sair = true;
                 }
             }
-            scanner.close();
             connection.close();
+            scanner.close();
             System.out.println("Conexão com o banco de dados fechada.");
         } catch (SQLException e) {
             e.printStackTrace();
         }        
     }
 
-    public static Usuario fazerLogin(int tipoUsuario, Connection connection) {
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println("Bem-vindo! Por favor, faça login.");
+    public static Usuario fazerLogin(int tipoUsuario, Connection connection) 
+    {
+        Usuario user = null;
+        System.out.println("Bem-vindo! Por favor, faça login.\n");
+        System.out.print("Usuario: ");
+        String usuario = scanner.nextLine();
+        System.out.print("Senha: ");
+        String senha = scanner.nextLine();
 
-            System.out.print("Usuario: ");
-            String usuario = scanner.nextLine();
-            System.out.print("Senha: ");
-            String senha = scanner.nextLine();
-
-            Usuario user = null;
-
-            switch (tipoUsuario) {
-                case 2:
-                    try {
-                        MedicoController medicoController = new MedicoController(connection);
-                        user = medicoController.buscarMedicoPorUsuario(usuario);
-                    } 
-                    catch (Exception e) {
-                        // TODO: handle exception
-                    }
-                    break;
-                case 3:
-                    try {
-                        RecepcionistaController recepcionistaController = new RecepcionistaController(connection);
-                        user = recepcionistaController.buscarPorUsuario(usuario);
-                    }
-                    catch (Exception e) {
-                        // TODO: handle exception
-                    }
-                    break;
-                case 4:
-                    try {
-                        LaboratorioController laboratorioController = new LaboratorioController(connection);
-                        user = laboratorioController.buscarPorUsuario(usuario);
-                    }
-                    catch (Exception e) {
-                        // TODO: handle exception
-                    }
-                    break;
-                default:
-                    return null;
-            }
-            scanner.close();
-
-            if (user != null) {
-                var senhaCadastrada = user.getSenha();
-                if(senha.equals(senhaCadastrada)){
-                    return user;
+        switch (tipoUsuario) {
+            case 2:
+                try {
+                    MedicoController medicoController = new MedicoController(connection);
+                    user = medicoController.buscarMedicoPorUsuario(usuario);
+                } 
+                catch (Exception e) {
+                    // TODO: handle exception
                 }
-                else{
-                    System.out.print("Senha digitada nao confere.\n");
+                break;
+            case 3:
+                try {
+                    RecepcionistaController recepcionistaController = new RecepcionistaController(connection);
+                    user = recepcionistaController.buscarPorUsuario(usuario);
                 }
-            } 
-            System.out.print("Usuario não encontrado\n");
-            return null;
+                catch (Exception e) {
+                    // TODO: handle exception
+                }
+                break;
+            case 4:
+                try {
+                    LaboratorioController laboratorioController = new LaboratorioController(connection);
+                    user = laboratorioController.buscarPorUsuario(usuario);
+                }
+                catch (Exception e) {
+                    // TODO: handle exception
+                }
+                break;
+            default:
+                break;
         }
+
+        if (user != null) {
+            var senhaCadastrada = user.getSenha();
+            if(senha.equals(senhaCadastrada)){
+                return user;
+            }
+            else{
+                System.out.print("Senha digitada nao confere.\n");
+            }
+        } 
+        System.out.print("Usuario não encontrado\n");
+        return null;
     }
 }

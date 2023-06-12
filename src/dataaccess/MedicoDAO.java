@@ -67,14 +67,15 @@ public class MedicoDAO {
     }
 
     public Medico buscarPorNome(String nome_buscar) throws SQLException {
-        String sql = "SELECT * FROM medico WHERE nome = ?";
+        String sql = "SELECT * FROM \"Medico\" WHERE nome = ?";
 
         Medico medico = null;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, nome_buscar);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    medico = criarMedico(resultSet);
+                    return criarMedico(resultSet);
                 }
             }
         }
@@ -83,7 +84,7 @@ public class MedicoDAO {
     }
 
     public List<Medico> buscarTodos() throws SQLException {
-        String sql = "SELECT * FROM medico";
+        String sql = "SELECT * FROM \"Medico\"";
         List<Medico> medicos = new ArrayList<>();
 
         try (PreparedStatement statement = connection.prepareStatement(sql);

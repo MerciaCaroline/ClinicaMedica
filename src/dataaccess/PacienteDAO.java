@@ -86,9 +86,10 @@ public class PacienteDAO {
         Paciente paciente = null;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, nome_buscar);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    paciente = criarPaciente(resultSet);
+                    return criarPaciente(resultSet);
                 }
             }
         }

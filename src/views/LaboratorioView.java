@@ -48,7 +48,7 @@ public class LaboratorioView {
                         String tipo = exame.getTipo();
                         Date dataResultado = exame.getDataResultado();
                         String resultado = exame.getResultado();
-                        System.out.print(id + " | " +" | "+ tipo +" | " + nomePaciente + " | " + dataResultado + " | "+ resultado + "\n");
+                        System.out.print(id + " | " + tipo +" | " + nomePaciente + " | " + dataResultado + " | "+ resultado + "\n");
                     }
                     break;
                 case 3:

@@ -28,7 +28,8 @@ public class MedicoView {
     private LaboratorioController laboratorioController;
     private SimpleDateFormat formato;
     private Paciente paciente;
-    
+    private Scanner scanner;
+
     // Construtor
     public MedicoView(Connection connection, Medico medico) {
         this.medico = medico;
@@ -37,112 +38,110 @@ public class MedicoView {
         this.pacienteController = new PacienteController(connection);
         this.laboratorioController = new LaboratorioController(connection);
         formato = new SimpleDateFormat("dd/MM/yyyy"); 
+        this.scanner = new Scanner(System.in);
     }
     
-       // Método para exibir o menu de opções do médico
-       public void exibirMenuMedico() throws ParseException, SQLException {     
-        try (Scanner scanner = new Scanner(System.in)) {
-            scanner.nextLine();
-            String nomePaciente = null;
-            System.out.println("Digite o nome do paciente que está em atendimento: ");
-            
-            nomePaciente = scanner.next();
-            paciente = this.pacienteController.buscarPacientePorNome(nomePaciente);
+    // Método para exibir o menu de opções do médico
+    public void exibirMenuMedico() throws ParseException, SQLException {     
+        System.out.println("Digite o nome do paciente que está em atendimento: ");
+        int teste = scanner.nextInt();
+        String nomePaciente = "Fulano de Tal";
+        paciente = this.pacienteController.buscarPacientePorNome(nomePaciente);
 
-            if(paciente == null){
-                System.out.println("Paciente não encontrado!");
-                System.out.println("Deseja cadastrá-lo? (S/N)");
-                String opcao = scanner.next();
+        if(paciente == null){
+            System.out.println("Paciente não encontrado!");
+            System.out.println("Deseja cadastrá-lo? (S/N)");
+            String opcao = scanner.nextLine();
 
-                switch (opcao.toUpperCase()) {
-                    case "S":
-                        pacienteController.cadastrarPaciente(nomePaciente);
-                        paciente = pacienteController.buscarPacientePorNome(nomePaciente);
-                        break;
-                    case "N":
-                        System.out.println("Voltando ao menu do médico...");
-                        return;
-                    default:
-                        System.out.println("Opção inválida! Tente novamente.");
-                        return;
-                }
+            switch (opcao.toUpperCase()) {
+                case "S":
+                    pacienteController.cadastrarPaciente(nomePaciente);
+                    paciente = pacienteController.buscarPacientePorNome(nomePaciente);
+                    break;
+                case "N":
+                    System.out.println("Voltando ao menu do médico...");
+                    return;
+                default:
+                    System.out.println("Opção inválida! Tente novamente.");
+                    return;
             }
-            
-            int opcao = 0;    
-
-            do {
-                System.out.println("=== MENU DO MÉDICO ===\n");   
-                System.out.println("1. Autorizar exame para consulta online");
-                System.out.println("2. Registrar histórico de paciente");
-                System.out.println("3. Consultar resultados de exames por paciente");
-                System.out.println("4. Solicitar exame para o paciente");
-                System.out.println("5. Sair");
-                System.out.println("Digite a opção desejada: ");
-                opcao = scanner.nextInt();
-
-                switch (opcao) {
-                    case 1: //Autorizar exame online
-                        var exames = this.exameController.buscarTodosExames()
-                            .stream().filter( p ->  
-                                p.getMedico().getId() == this.medico.getId()
-                                & p.isDisponivelOnline() == false 
-                                & p.getPaciente().getId() == paciente.getId())
-                            .collect(Collectors.toList());
-                            
-                        for (Exame ex : exames) {
-                            int id = ex.getId();
-                            String tipo = ex.getTipo();
-                            Date dataSolicitacao = ex.getDataSolicitacao();
-                            System.out.print(id + " | " + tipo +" | "+ dataSolicitacao +" | " + "\n");
-                        }
-
-                        this.medicoController.autorizarExameOnline();
-                        break;
-                    case 2: // Registrar historico Paciente              
-                        System.out.println("Digite o histórico do paciente: ");
-                        String historicoPaciente = scanner.next();
-
-                        medicoController.registrarHistoricoPaciente(paciente, historicoPaciente);
-                        break;
-                    case 3: // Consultar exames
-                        var examesPaciente = this.medicoController.consultarResultadosExames(medico, paciente);
-
-                        for (Exame ex : examesPaciente) {
-                            int id = ex.getId();
-                            String tipo = ex.getTipo();
-                            Date dataResultado = ex.getDataResultado();
-                            String resultado = ex.getResultado();
-                            System.out.print(id + " | " + tipo +" | "+ dataResultado +" | " + resultado + "\n");
-                        }
-                        break;
-                    case 4: // Solicitacao de exame                        
-                        System.out.println("Em qual laboratorio deseja solicitar um exame? Digite a opção desejada: ");
-                        var laboratorios = this.laboratorioController.buscarTodos();
-                        for (Laboratorio laboratorio : laboratorios) {
-                            int id = laboratorio.getId();
-                            String nome = laboratorio.getNome();
-                            System.out.print(id + " | " + nome+"\n");
-                        }                        
-                        var laboratorio_id = scanner.nextInt();
-                        Laboratorio laboratorioEscolhido = laboratorios
-                            .stream()
-                            .filter( p ->  
-                                p.getId() == laboratorio_id)
-                            .findFirst().get();
-                                      
-                        System.out.println("Digite o tipo de exame que deseja solicitar: ");
-                        String tipoExame = scanner.next();
-
-                        this.exameController.solicitarExame(tipoExame, paciente, medico, laboratorioEscolhido);
-                        break;
-                    case 5:
-                        System.out.println("Saindo do menu do médico...");
-                        break;
-                    default:
-                        System.out.println("Opção inválida! Tente novamente.");
-                }            
-            } while (opcao != 5);
         }
+        
+        int opcao = 0;    
+
+        do {
+            System.out.println("=== MENU DO MÉDICO ===\n");   
+            System.out.println("1. Autorizar exame para consulta online");
+            System.out.println("2. Registrar histórico de paciente");
+            System.out.println("3. Consultar resultados de exames por paciente");
+            System.out.println("4. Solicitar exame para o paciente");
+            System.out.println("5. Sair");
+            System.out.println("Digite a opção desejada: ");
+            opcao = scanner.nextInt();
+            scanner.nextLine();
+            
+            switch (opcao) {
+                case 1: //Autorizar exame online
+                    var exames = this.exameController.buscarTodosExames()
+                        .stream().filter( p ->  
+                            p.getMedico().getId() == this.medico.getId()
+                            & p.isDisponivelOnline() == false 
+                            & p.getPaciente().getId() == paciente.getId())
+                        .collect(Collectors.toList());
+                        
+                    for (Exame ex : exames) {
+                        int id = ex.getId();
+                        String tipo = ex.getTipo();
+                        Date dataSolicitacao = ex.getDataSolicitacao();
+                        System.out.print(id + " | " + tipo +" | "+ dataSolicitacao +" | " + "\n");
+                    }
+
+                    this.medicoController.autorizarExameOnline();
+                    break;
+                case 2: // Registrar historico Paciente              
+                    System.out.println("Digite o histórico do paciente: ");
+                    String historicoPaciente = scanner.next();
+
+                    medicoController.registrarHistoricoPaciente(paciente, historicoPaciente);
+                    break;
+                case 3: // Consultar exames
+                    var examesPaciente = this.medicoController.consultarResultadosExames(medico, paciente);
+
+                    for (Exame ex : examesPaciente) {
+                        int id = ex.getId();
+                        String tipo = ex.getTipo();
+                        Date dataResultado = ex.getDataResultado();
+                        String resultado = ex.getResultado();
+                        System.out.print(id + " | " + tipo +" | "+ dataResultado +" | " + resultado + "\n");
+                    }
+                    break;
+                case 4: // Solicitacao de exame                        
+                    System.out.println("Em qual laboratorio deseja solicitar um exame? Digite a opção desejada: ");
+                    var laboratorios = this.laboratorioController.buscarTodos();
+                    for (Laboratorio laboratorio : laboratorios) {
+                        int id = laboratorio.getId();
+                        String nome = laboratorio.getNome();
+                        System.out.print(id + " | " + nome+"\n");
+                    }                        
+                    var laboratorio_id = scanner.nextInt();
+                    Laboratorio laboratorioEscolhido = laboratorios
+                        .stream()
+                        .filter( p ->  
+                            p.getId() == laboratorio_id)
+                        .findFirst().get();
+                                    
+                    System.out.println("Digite o tipo de exame que deseja solicitar: ");
+                    String tipoExame = scanner.next();
+
+                    this.exameController.solicitarExame(tipoExame, paciente, medico, laboratorioEscolhido);
+                    break;
+                case 5:
+                    System.out.println("Saindo do menu do médico...");
+                    break;
+                default:
+                    System.out.println("Opção inválida! Tente novamente.");
+            }            
+        } while (opcao != 5);
     }
 }
 

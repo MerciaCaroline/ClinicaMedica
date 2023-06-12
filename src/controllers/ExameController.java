@@ -47,12 +47,17 @@ public class ExameController {
         exameDAO.excluir(id);
     }
 
-    public Exame enviarResultadoExame(Laboratorio laboratorio) {
+    public void enviarResultadoExame(Laboratorio laboratorio) {
         Exame exame = null;
         try {
             List<Exame> exames = obterPendentesPorLaboratorio(laboratorio);
 
-            System.out.print("Exames Pendentes: ");
+            if(exames.isEmpty()){
+                System.out.print("Não possui Exames Pendentes de resultado \n ");
+                return;
+            }
+
+            System.out.print("Exames Pendentes: \n ");
 
             for (Exame ex : exames) {
                 int id = ex.getId();
@@ -74,9 +79,7 @@ public class ExameController {
         } 
         catch (Exception e) {
             // TODO: handle exception
-        }
-        
-        return exame;        
+        }   
     }
 
     public List<Exame> consultarResultadosExames(Laboratorio laboratorio) {

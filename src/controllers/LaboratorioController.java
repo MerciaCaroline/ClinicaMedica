@@ -15,6 +15,7 @@ public class LaboratorioController {
     
     public LaboratorioController(Connection connection) {
         this.connection = connection;
+        this.LaboratorioDAO = new LaboratorioDAO(connection);
     }
 
     public Laboratorio buscarPorId(int id) throws SQLException {
