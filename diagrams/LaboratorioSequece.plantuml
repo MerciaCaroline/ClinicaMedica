@@ -1,0 +1,25 @@
+@startuml
+
+actor "Laboratorio"
+
+"Laboratorio"-> Controller: Autenticar
+Controller -> DAO: Consultar credenciais
+Controller <-- DAO: Retorno credenciais
+alt usuario autenticadao
+    alt Enviar resultado exame
+        "Laboratorio" ->  Controller: Consultar exames pendentes resultado
+        Controller -> DAO: Obter Exames Pendente Resultado
+        Controller <-- DAO: Exames pendentes
+        Controller -> "Laboratorio": Exames pendentes
+        "Laboratorio" -> Controller: Enviar Resultado
+        Controller -> DAO: Persistir resultado
+    else Consultar Resultados Exames...
+        "Laboratorio" ->  Controller: Consultar resultados
+        Controller -> DAO: Listar Exames
+        Controller <-- DAO: Exames com resultado
+        Controller -> "Laboratorio": Exames com resultado
+end
+else usuario nao autenticado...
+    "Laboratorio"-> Controller: Autenticar
+end
+@enduml
