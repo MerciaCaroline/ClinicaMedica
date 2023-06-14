@@ -2,31 +2,22 @@ package controllers;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import dataaccess.ExameDAO;
 import dataaccess.PacienteDAO;
-import models.Consulta;
 import models.Exame;
-import models.Medico;
 import models.Paciente;
 
 public class PacienteController {
-    private Paciente paciente;
-    private List<Consulta> consultas;
     private PacienteDAO pacienteDAO;
+    private ExameDAO exameDAO;
     private Scanner scanner;
 
     public PacienteController(Connection connection) {
         this.pacienteDAO = new PacienteDAO(connection);
-    }
-
-    public PacienteController(Paciente paciente) {
-        this.paciente = paciente;
-        this.consultas = new ArrayList<>();
+        this.exameDAO = new ExameDAO(connection);
         this.scanner = new Scanner(System.in);
     }
 
@@ -83,27 +74,23 @@ public class PacienteController {
     }
 
     // Outros métodos
-    public void marcarConsulta(Medico medico, Date data, Time horarioConsulta, String descricao) {
-        Consulta consulta = new Consulta(paciente, medico, data, horarioConsulta, descricao);
-        consultas.add(consulta);
-    }
-    public void cancelarConsulta(Consulta consulta) {
-        consultas.remove(consulta);
+    public Exame solicitarExame(int exameId) throws SQLException {
+        return exameDAO.buscarPorId(exameId);
     }
 
-    public List<Consulta> consultarConsultas() {
-        return consultas;
+    public void setPacienteDAO(PacienteDAO pacienteDAO) {
+        this.pacienteDAO = pacienteDAO;
     }
 
-    public List<Exame> solicitarExames(List<String> tiposExame) {
-        List<Exame> examesSolicitados = new ArrayList<>();
-        // Lógica para solicitar exames ao médico ou laboratório
-        // Criação dos objetos Exame e adição na lista examesSolicitados
-        return examesSolicitados;
+    public PacienteDAO getPacienteDAO() {
+        return pacienteDAO;
     }
 
-    public void autorizarExamesOnline() {
-        // Lógica para autorizar que os resultados de exames sejam disponibilizados online
-        // Atualizar os atributos dos ResultadoExame correspondentes
+    public void setExameDAO(ExameDAO exameDAO) {
+        this.exameDAO = exameDAO;
+    }
+
+    public ExameDAO getExameDAO() {
+        return exameDAO;
     }
 }

@@ -27,4 +27,12 @@ public class LaboratorioController {
     public List<Laboratorio> buscarTodos() throws SQLException{
         return LaboratorioDAO.buscarTodos();
     }
+
+    public void setLaboratorioDAO(LaboratorioDAO laboratorioDAO) {
+        LaboratorioDAO = laboratorioDAO;
+    }
+
+    public LaboratorioDAO getLaboratorioDAO() {
+        return LaboratorioDAO;
+    }
 }

@@ -120,4 +120,12 @@ public class ExameController {
             // TODO: handle exception
         }
     }
+
+    public void setExameDAO(ExameDAO exameDAO) {
+        this.exameDAO = exameDAO;
+    }
+
+    public ExameDAO getExameDAO() {
+        return exameDAO;
+    }
 }

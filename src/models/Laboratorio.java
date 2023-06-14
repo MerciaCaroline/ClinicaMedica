@@ -4,6 +4,11 @@ public class Laboratorio extends Usuario {
     private String telefone;
     private String endereco;
 
+     // Construtores 
+    public Laboratorio() {
+        super();
+    }
+
     public Laboratorio(String usuario, String senha, String nome, String telefone, String endereco) {
         super(usuario, senha, nome);
         this.telefone = telefone;
@@ -16,9 +21,6 @@ public class Laboratorio extends Usuario {
         this.endereco = endereco;
         this.id = id;
     }
-
-    // Construtores 
-    
     
     // Getters e setters
     public int getId() {
