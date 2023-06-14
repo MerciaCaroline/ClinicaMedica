@@ -1,5 +1,6 @@
 package controllers;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import dataaccess.RecepcionistaDAO;
@@ -8,14 +9,17 @@ import dataaccess.PacienteDAO;
 import models.Consulta;
 import models.Medico;
 import models.Paciente;
+import models.Recepcionista;
 
 public class RecepcionistaController {
     private RecepcionistaDAO recepcionistaDAO;
     private MedicoDAO medicoDAO;
     private PacienteDAO pacienteDAO;
 
-    public RecepcionistaController(RecepcionistaDAO recepcionistaDAO) {
-        this.recepcionistaDAO = recepcionistaDAO;
+    public RecepcionistaController(Connection connection) {
+        this.recepcionistaDAO = new RecepcionistaDAO(connection);
+        this.medicoDAO = new MedicoDAO(connection);
+        this.pacienteDAO = new PacienteDAO(connection);
     }
 
     public boolean registrarPaciente(Paciente paciente) {
@@ -99,5 +103,41 @@ public class RecepcionistaController {
             System.out.println("Erro ao acessar o banco de dados.");
             return false;
         }
+    }
+
+    public Recepcionista buscarPorNome(String nome) throws SQLException {
+        return recepcionistaDAO.buscarPorNome(nome);
+    }
+
+    public Recepcionista buscarPorId(int id) throws SQLException {
+        return recepcionistaDAO.buscarPorId(id);
+    }
+
+    public Recepcionista buscarPorUsuario(String usuario) throws SQLException {
+        return recepcionistaDAO.buscarPorUsuario(usuario);
+    }
+
+    public void setMedicoDAO(MedicoDAO medicoDAO) {
+        this.medicoDAO = medicoDAO;
+    }
+
+    public void setPacienteDAO(PacienteDAO pacienteDAO) {
+        this.pacienteDAO = pacienteDAO;
+    }
+
+    public void setRecepcionistaDAO(RecepcionistaDAO recepcionistaDAO) {
+        this.recepcionistaDAO = recepcionistaDAO;
+    }
+
+    public RecepcionistaDAO getRecepcionistaDAO() {
+        return recepcionistaDAO;
+    }
+
+    public MedicoDAO getMedicoDAO() {
+        return medicoDAO;
+    }
+
+    public PacienteDAO getPacienteDAO() {
+        return pacienteDAO;
     }
 }

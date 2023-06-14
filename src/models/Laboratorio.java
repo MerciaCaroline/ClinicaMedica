@@ -1,21 +1,25 @@
 package models;
 
-public class Laboratorio {
-    private int id;
-    private String nome;
+public class Laboratorio extends Usuario {
     private String telefone;
     private String endereco;
 
-    // Construtores 
+     // Construtores 
     public Laboratorio() {
         super();
     }
 
-    public Laboratorio(int id, String nome, String telefone, String endereco) {
-        this.id = id;
-        this.nome = nome;
+    public Laboratorio(String usuario, String senha, String nome, String telefone, String endereco) {
+        super(usuario, senha, nome);
         this.telefone = telefone;
         this.endereco = endereco;
+    }
+
+    public Laboratorio(int id, String usuario, String senha, String nome, String telefone, String endereco) {
+        super(usuario, senha, nome);
+        this.telefone = telefone;
+        this.endereco = endereco;
+        this.id = id;
     }
     
     // Getters e setters

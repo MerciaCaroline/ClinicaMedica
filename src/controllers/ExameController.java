@@ -1,23 +1,30 @@
 package controllers;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import dataaccess.ExameDAO;
 import models.Exame;
+import models.Laboratorio;
 import models.Medico;
 import models.Paciente;
-import models.ResultadoExame;
 
 public class ExameController {
-    private static ExameDAO exameDAO;
+    private ExameDAO exameDAO;
+    private Scanner scanner;
 
-    public ExameController() {
-        super();
+    public ExameController(Connection connection) {
+        this.exameDAO = new ExameDAO(connection);
+        scanner = new Scanner(System.in);
     }
 
     // CRUD
-    public void cadastrarExame(Exame exame) throws SQLException{
+    public void solicitarExame(String tipo, Paciente paciente, Medico medico, Laboratorio laboratorio) throws SQLException{
+        Exame exame = new Exame(paciente, medico, laboratorio, tipo);
         exameDAO.inserir(exame);
     }
 
@@ -29,28 +36,96 @@ public class ExameController {
         return exameDAO.buscarTodos();
     }
 
-    public List<Exame> buscarResultadoExames(int medicoId) throws SQLException{
-        return exameDAO.buscarResultadoExames(medicoId);
-    }
-
-    public void atualizarExame(Exame exame) throws SQLException{
-        exameDAO.atualizar(exame);
+    public List<Exame> obterPendentesPorLaboratorio(Laboratorio laboratorio) throws SQLException{
+        List<Exame> exames =  exameDAO.buscarPorLaboratorio(laboratorio.getId());
+        return  exames.stream().filter(
+            p ->  p.getResultado() == null)
+        .collect(Collectors.toList());
     }
 
     public void removerExame(int id) throws SQLException{
         exameDAO.excluir(id);
     }
 
-    public void enviarResultadoExame(ResultadoExame resultadoExame, Medico medico) {
-        // Lógica para enviar o resultado do exame para o médico
+    public void enviarResultadoExame(Laboratorio laboratorio) {
+        Exame exame = null;
+        try {
+            List<Exame> exames = obterPendentesPorLaboratorio(laboratorio);
+
+            if(exames.isEmpty()){
+                System.out.print("Não possui Exames Pendentes de resultado \n ");
+                return;
+            }
+
+            System.out.print("Exames Pendentes: \n ");
+
+            for (Exame ex : exames) {
+                int id = ex.getId();
+                String nomePaciente = ex.getPaciente().getNome(); 
+                String tipo = ex.getTipo();
+                Date dataSolicitacao = ex.getDataSolicitacao();
+                System.out.print(id + " | " +" | "+ tipo +" | "+ dataSolicitacao +" | " + nomePaciente + "\n");
+            }
+            System.out.print("Informe o numero do exame que deseja disponibilizar resultado: ");
+            int exameId = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("Digite o resultado do exame: ");
+            String resultado = scanner.nextLine();
+
+            exame = exames.stream().filter( p -> p.getId() == exameId).findFirst().get();
+            exame.setResultado(resultado);
+            this.exameDAO.inserirResultado(exame);
+        } 
+        catch (Exception e) {
+            // TODO: handle exception
+        }   
     }
 
-    public List<ResultadoExame> consultarResultadosExames() {
-        // Lógica para consultar os resultados de exames enviados pelo laboratório
-        return null;
+    public List<Exame> consultarResultadosExames(Laboratorio laboratorio) {
+        List<Exame> examesEnviados = null;
+
+        try {
+            List<Exame> exames =  exameDAO.buscarPorLaboratorio(laboratorio.getId());
+            examesEnviados = exames.stream().filter(
+                p -> p.getResultado() != null)
+            .collect(Collectors.toList());
+        } 
+        catch (Exception e) {
+            // TODO: handle exception
+        }
+
+        return examesEnviados;        
     }
 
-    public void enviarResultadoExame(ResultadoExame resultadoExame, Medico medico, Paciente paciente) {
-        // Lógica para enviar o resultado do exame diretamente ao médico ou ao paciente
+    public boolean disponibilizarExameOnline(int codigoExame) {
+        try {
+            Exame exame = buscarExame(codigoExame);
+            exame.setDisponivelOnline(true);
+            this.exameDAO.atualizarFlags(exame.getId(), exame.isDisponivelOnline(), exame.isEntreguePaciente());
+            return true;
+        } 
+        catch (Exception e) {
+            // TODO: handle exception
+        }
+        return false;
+    }
+
+    public void marcarComoEntregue(Exame exame) {
+        try {
+            exame.setEntreguePaciente(true);
+            this.exameDAO.atualizarFlags(exame.getId(), exame.isDisponivelOnline(), exame.isEntreguePaciente());
+        } 
+        catch (Exception e) {
+            // TODO: handle exception
+        }
+    }
+
+    public void setExameDAO(ExameDAO exameDAO) {
+        this.exameDAO = exameDAO;
+    }
+
+    public ExameDAO getExameDAO() {
+        return exameDAO;
     }
 }

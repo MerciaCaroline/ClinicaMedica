@@ -21,7 +21,7 @@ public class PacienteDAO {
     }
 
     public void criar(Paciente paciente) throws SQLException {
-        String query = "INSERT INTO pacientes (nome, telefone, endereco) VALUES (?, ?, ?)";
+        String query = "INSERT INTO \"Paciente\" (nome, telefone, endereco) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, paciente.getNome());
             statement.setString(2, paciente.getTelefone());
@@ -30,10 +30,10 @@ public class PacienteDAO {
         }
     }
 
-    public Paciente ler(int id) throws SQLException {
-        String query = "SELECT * FROM pacientes WHERE id = ?";
+    public Paciente buscarPorCpf(int cpf) throws SQLException {
+        String query = "SELECT * FROM \"Paciente\" WHERE cpf = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, id);
+            statement.setInt(1, cpf);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     return criarPaciente(resultSet);
@@ -45,7 +45,7 @@ public class PacienteDAO {
 
     public List<Paciente> lerTodos() throws SQLException {
         List<Paciente> pacientes = new ArrayList<>();
-        String query = "SELECT * FROM pacientes";
+        String query = "SELECT * FROM \"Paciente\"";
         try (PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
@@ -57,7 +57,7 @@ public class PacienteDAO {
     }
 
     public Paciente buscarPorId(int id) throws SQLException {
-        String query = "SELECT * FROM pacientes WHERE id = ?";
+        String query = "SELECT * FROM \"Paciente\" WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -70,7 +70,7 @@ public class PacienteDAO {
     }
 
     public void atualizar(Paciente paciente) throws SQLException {
-        String query = "UPDATE pacientes SET nome = ?, relefone = ?, endereco = ? WHERE id = ?";
+        String query = "UPDATE \"Paciente\" SET nome = ?, relefone = ?, endereco = ? WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, paciente.getNome());
             statement.setString(2, paciente.getTelefone());
@@ -81,30 +81,24 @@ public class PacienteDAO {
     }
 
     public Paciente buscarPorNome(String nome_buscar) throws SQLException {
-        String sql = "SELECT * FROM medico WHERE nome = ?";
+        String sql = "SELECT * FROM \"Paciente\" WHERE nome = ?";
 
         Paciente paciente = null;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, nome_buscar);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    int id = resultSet.getInt("id");
-                    String usuario = resultSet.getString("usuario");
-                    String senha = resultSet.getString("senha");
-                    String nome = resultSet.getString("nome");
-                    String endereco = resultSet.getString("endereco");
-                    String telefone = resultSet.getString("telefone");
-
-                    paciente = new Paciente(id, usuario, senha, nome, endereco, telefone);
+                    return criarPaciente(resultSet);
                 }
             }
         }
-
+        
         return paciente;
     }
 
     public void excluir(int id) throws SQLException {
-        String query = "DELETE FROM pacientes WHERE id = ?";
+        String query = "DELETE FROM \"Paciente\" WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -118,8 +112,12 @@ public class PacienteDAO {
         String usuario = resultSet.getString("usuario");
         String senha = resultSet.getString("senha");
         String endereco = resultSet.getString("endereco");
+        char sexo = resultSet.getString("sexo").charAt(0);
+        int idade = resultSet.getInt("idade");
+        String email = resultSet.getString("email");
+        String cpf = resultSet.getString("cpf");
 
-        return new Paciente(id, usuario, senha, nome, telefone, endereco);
+        return new Paciente(id, usuario, senha, nome, telefone, cpf, sexo, email, idade, endereco);
     }
 }
 

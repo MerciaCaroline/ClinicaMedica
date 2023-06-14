@@ -1,0 +1,46 @@
+@startuml
+
+actor "Medico"
+
+"Medico"-> Controller: Autenticar
+Controller -> DAO: Consultar credenciais
+Controller <-- DAO: Retorno credenciais
+alt usuario autenticadao
+    "Medico" ->  Controller: Informar nome paciente
+    Controller -> DAO: Obter Paciente
+    Controller <-- DAO: Paciente
+    "Medico" <-- Controller
+    alt paciente encontrado
+        alt Solicitar Exame
+            "Medico" -> Controller : Solicitar exame
+            Controller -> DAO : Persistir exame
+            Controller <-- DAO
+            "Medico" <-- Controller
+        else Autorizar exame online...
+            "Medico" -> Controller : Autorizar exames
+            Controller -> DAO : Obter exames paciente
+            Controller <-- DAO : Exames
+            "Medico" <-- Controller
+            "Medico" -> Controller : Autorizar exame X
+            Controller -> DAO: Atualizar exame X
+            Controller <-- DAO
+            "Medico" <-- Controller
+        else Registrar histórico de paciente
+            "Medico" -> Controller : Registrar historico
+            Controller -> DAO : Registrar historico
+            Controller <-- DAO
+            "Medico" <-- Controller
+        else Consultar exames
+            "Medico" -> Controller : Consultar resultados exames
+            Controller -> DAO : Obter exames com resultado
+            Controller <-- DAO : Exames com resultado
+            "Medico" <-- Controller : Exames 
+        end
+    else paciente nao encontrado...
+        Controller -> Medico: Solicita Cadastro Paciente
+        "Medico" ->  Controller: Cadastrar Paciente   
+    end
+else usuario nao autenticado...
+    "Medico"-> Controller: Autenticar
+end
+@enduml

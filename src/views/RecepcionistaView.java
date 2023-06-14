@@ -1,12 +1,12 @@
 package views;
+
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.sql.Time;
-// Pacote visão (View)
 import java.util.Scanner;
-
 
 import controllers.RecepcionistaController;
 import models.Medico;
@@ -14,12 +14,12 @@ import models.Paciente;
 import models.Consulta;
 
 public class RecepcionistaView {
-    private RecepcionistaController controller;
+    private RecepcionistaController recepcionistaController;
     private Scanner scanner;
 
     // Construtor
-    public RecepcionistaView(RecepcionistaController controller) {
-        this.controller = controller;
+    public RecepcionistaView(Connection connection) {
+        this.recepcionistaController = new RecepcionistaController(connection);
         this.scanner = new Scanner(System.in);
     }
 
@@ -57,23 +57,24 @@ public class RecepcionistaView {
         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
  
-
+        scanner.nextLine();
         System.out.println("Digite o nome do médico: ");
-        String nomeMedico = scanner.next();
+        String nomeMedico = scanner.nextLine();
 
         // Buscar o médico no banco de dados
-        Medico medico = controller.buscarMedicoPorNome(nomeMedico);
+        Medico medico = recepcionistaController.buscarMedicoPorNome(nomeMedico);
         if (medico == null) {
             System.out.println("Médico não encontrado.");
             return;
         }
 
         // Solicitar informações do paciente
+        scanner.nextLine();
         System.out.println("Digite o nome do paciente: ");
-        String nomePaciente = scanner.next();
+        String nomePaciente = scanner.nextLine();
 
         // Buscar o paciente no banco de dados
-        Paciente paciente = controller.buscarPacientePorNome(nomePaciente);
+        Paciente paciente = recepcionistaController.buscarPacientePorNome(nomePaciente);
         if (paciente == null) {
             System.out.println("Paciente não encontrado.");
             return;
@@ -81,11 +82,11 @@ public class RecepcionistaView {
 
         System.out.println("Digite a data no formato yyyy-MM-dd: ");
         String dataString = scanner.next();
-        Date dataConsulta = formato.parse(dataString); 
+        Date dataConsulta = new Date(formato.parse(dataString).getTime()); 
 
         System.out.println("Digite a hora no formato HH:mm: ");
         String horaString = scanner.next();
-        Date format_hora = sdf.parse(horaString);
+        Date format_hora = new Date(sdf.parse(horaString).getTime());
         Time horaConsulta = new Time(format_hora.getTime());
 
         // Solicitar descrição da consulta
@@ -96,7 +97,7 @@ public class RecepcionistaView {
         Consulta consulta = new Consulta(paciente, medico, dataConsulta, horaConsulta, descricaoConsulta);
 
         // Lógica para marcar a consulta (exemplo: salvar no banco de dados)
-        boolean consultaMarcada = controller.marcarConsulta(consulta);
+        boolean consultaMarcada = recepcionistaController.marcarConsulta(consulta);
         if (consultaMarcada) {
             System.out.println("Consulta marcada com sucesso.");
         } else {
@@ -109,7 +110,7 @@ public class RecepcionistaView {
         System.out.println("Digite o código da consulta: ");
         int codigoConsulta = scanner.nextInt();
 
-        boolean sucesso = controller.cancelarConsulta(codigoConsulta);
+        boolean sucesso = recepcionistaController.cancelarConsulta(codigoConsulta);
 
         if (sucesso) {
             System.out.println("Consulta cancelada com sucesso!");

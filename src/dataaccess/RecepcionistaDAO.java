@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 
 import models.Consulta;
 import models.Paciente;
+import models.Recepcionista;
 
 public class RecepcionistaDAO {
     private Connection connection;
@@ -84,13 +85,13 @@ public class RecepcionistaDAO {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
         String strDate = dateFormat.format(consulta.getData());  
 
-        String query = "INSERT INTO consulta (id_paciente, id_medico, data_consulta, hora_consulta, observacao) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO consulta (id_paciente, id_medico, data_consulta, hora_consulta, telefone) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, consulta.getPaciente().getId());
             statement.setInt(2, consulta.getMedico().getId());
             statement.setString(3, strDate);
             statement.setTime(4, consulta.getHora());
-            statement.setString(5, consulta.getObservacao());
+            statement.setString(5, consulta.getTelefone());
             int rowsInserted = statement.executeUpdate();
             return rowsInserted > 0;
         }
@@ -104,5 +105,64 @@ public class RecepcionistaDAO {
             int rowsDeleted = statement.executeUpdate();
             return rowsDeleted > 0;
         }
+    }
+
+    public Recepcionista buscarPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM \"Recepcionista\" WHERE id = ?";
+        Recepcionista recepcionista = null;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    recepcionista = criarRecepcionista(resultSet);
+                }
+            }
+        }
+
+        return recepcionista;
+    }
+
+    public Recepcionista buscarPorUsuario(String usuario) throws SQLException {
+        String sql = "SELECT * FROM \"Recepcionista\" WHERE usuario = ?";
+
+        Recepcionista recepcionista = null;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, usuario);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    recepcionista = criarRecepcionista(resultSet);
+                }
+            }
+        }
+
+        return recepcionista;
+    }
+
+    public Recepcionista buscarPorNome(String nome) throws SQLException {
+        String sql = "SELECT * FROM \"Recepcionista\" WHERE nome = ?";
+
+        Recepcionista recepcionista = null;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, nome);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    recepcionista = criarRecepcionista(resultSet);
+                }
+            }
+        }
+
+        return recepcionista;
+    }
+
+    private Recepcionista criarRecepcionista(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt("id");
+        String usuario = resultSet.getString("usuario");
+        String senha = resultSet.getString("senha");
+        String nome = resultSet.getString("nome");
+
+        return new Recepcionista(id, usuario, senha, nome);
     }
 }

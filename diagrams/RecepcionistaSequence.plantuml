@@ -1,0 +1,32 @@
+@startuml
+
+actor "Recepcionista"
+
+"Recepcionista"-> Controller: Autenticar
+Controller -> DAO: Consultar credenciais
+Controller <-- DAO: Retorno credenciais
+alt usuario autenticadao
+    alt Marcar consulta
+        "Recepcionista" -> Controller : Marcar consulta
+        Controller -> DAO : Verificar agenda
+        Controller <-- DAO : disponibilidade agenda
+        alt agenda disponivel
+            Controller -> DAO : Marcar consulta
+            Controller <-- DAO :
+        else agenda nao disponivel...
+             "Recepcionista" <-- Controller : Agenda nao disponivel
+        end        
+    else Cancelar consulta
+        "Recepcionista" -> Controller : Cancelar consulta
+        Controller -> DAO : Listar consultas não realizadas
+        Controller <-- DAO : Consultas
+        "Recepcionista" <-- Controller
+        "Recepcionista" -> Controller : Consulta X
+        Controller -> DAO: excluir consulta x
+        Controller <-- DAO
+        "Recepcionista" <-- Controller 
+    end
+else usuario nao autenticado
+    "Recepcionista"-> Controller: Autenticar
+end
+@enduml

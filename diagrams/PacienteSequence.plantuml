@@ -1,0 +1,12 @@
+@startuml
+actor "Paciente"
+
+"Paciente"-> Controller: Obter Resultado Exame
+Controller -> DAO: Consultar exame pelo codigo
+Controller <-- DAO:
+alt exame encontrado
+    "Paciente" <-  Controller: Resultado do exame
+else exame não encontrado...
+    "Paciente" <- Controller: Erro: Exame  nao encontrado
+end
+@enduml

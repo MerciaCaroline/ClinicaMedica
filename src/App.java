@@ -2,12 +2,26 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-public class App {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        boolean sair = false;
+import controllers.LaboratorioController;
+import controllers.MedicoController;
+import controllers.RecepcionistaController;
+import models.Laboratorio;
+import models.Medico;
+import models.Usuario;
+import views.LaboratorioView;
+import views.MedicoView;
+import views.PacienteView;
+import views.RecepcionistaView;
 
+public class App {
+    private static Scanner scanner;
+
+    public static void main(String[] args) {
+        boolean sair = false;
+        int escolha;
         System.out.println("\nBem Vindo! \n\n");
+
+        scanner = new Scanner(System.in);
 
         try {
             PostgresDBConnection database = new PostgresDBConnection();
@@ -16,88 +30,161 @@ public class App {
             // ...
 
             while (!sair) {
-                System.out.println("Escolha uma função:\n1 - Paciente\n2 - Médico\n3 - Recepcionista\n4 - Financeiro\n5 - Laboratório\n6 - RH\n7 - Admin\n");
-    
-                int escolha = scanner.nextInt();
+                System.out.println("Escolha uma função:\n1 - Paciente\n2 - Médico\n3 - Recepcionista\n4 - Laboratório\n\n");
+                
+                escolha = scanner.nextInt();
+                scanner.nextLine();
+                Usuario usuario = null;
     
                 switch (escolha) {
                     case 1:
-                        System.out.println("Para visualizar o resultado do seu exame, digite o código disponibilizado pelo seu médico:");
-                        String codigo = scanner.next();
-                        if (codigo == "123"){
-                            System.out.println("Aqui está o resultado do seu exame");
+                        System.out.println("Você escolheu a função: Paciente");
+                        PacienteView pacienteView = new PacienteView(connection);
+                        try {
+                            pacienteView.exibirMenuPaciente();                           
+                        } 
+                        catch (Exception e) {
+                            // TODO: handle exception
                         }
-                        else{
-                            System.out.println("Exame não encontrado, confira o código digitado e tente novamente. Caso seja necessário entre em contato com seu médico");
-                        }
-                        // Faça algo relacionado ao paciente
                         break;
                     case 2:
                         System.out.println("Você escolheu a função: Médico");
-                        // Faça algo relacionado ao médico
+
+                        usuario = fazerLogin(2, connection);
+
+                        if ( usuario != null) {
+                            System.out.println("Login bem-sucedido! Acesso concedido.");
+                            MedicoController medicoController = new MedicoController(connection);
+                            Medico medico = medicoController.buscarMedicoPorId(usuario.getId());
+                            MedicoView medicoView = new MedicoView(connection, medico);
+                            try {
+                                medicoView.exibirMenuMedico();                 
+                            } 
+                            catch (Exception e) {
+
+                                // TODO: handle exception
+                            }
+                        } 
+                        else {
+                            System.out.println("Falha no login! Acesso negado.");
+                            // Faça algo após a falha no login
+                        }
                         break;
                     case 3:
                         System.out.println("Você escolheu a função: Recepcionista");
-    
-                        System.out.println("Bem-vindo! Por favor, faça login.");
-                        boolean autenticado = fazerLogin();
-    
-                        if (autenticado) {
+
+                        usuario = fazerLogin(3, connection);
+
+                        if ( usuario != null) {
                             System.out.println("Login bem-sucedido! Acesso concedido.");
-                            // Faça algo após o login bem-sucedido
-                            // Faça algo relacionado à recepcionista
-                        } else {
+                            RecepcionistaView recepcionistaView = new RecepcionistaView(connection);
+                            try {
+                                recepcionistaView.exibirMenuRecepcionista();                 
+                            } 
+                            catch (Exception e) {
+
+                                // TODO: handle exception
+                            }
+                        } 
+                        else {
                             System.out.println("Falha no login! Acesso negado.");
                             // Faça algo após a falha no login
                         }
                         break;
                     case 4:
-                        System.out.println("Você escolheu a função: Financeiro");
-                        // Faça algo relacionado ao setor financeiro
-                        break;
-                    case 5:
                         System.out.println("Você escolheu a função: Laboratório");
-                        // Faça algo relacionado ao laboratório
-                        break;
-                    case 6:
-                        System.out.println("Você escolheu a função: RH");
-                        // Faça algo relacionado ao setor de RH
-                        break;
-                    case 7:
-                        System.out.println("Você escolheu a função: Admin");
-                        // Faça algo relacionado à administração
+
+                        usuario = fazerLogin(4, connection);
+
+                        if ( ( usuario != null)) {
+                            System.out.println("Login bem-sucedido! Acesso concedido.");
+                            LaboratorioController laboratorioController = new LaboratorioController(connection);
+                            Laboratorio laboratorio = laboratorioController.buscarPorId(usuario.getId());
+                        
+                            LaboratorioView LaboratorioView = new LaboratorioView(connection, laboratorio);
+                            try {
+                                LaboratorioView.exibirMenu();                 
+                            } 
+                            catch (Exception e) {
+
+                                // TODO: handle exception
+                            }
+                        } 
+                        else {
+                            System.out.println("Falha no login! Acesso negado.\n");
+                            // Faça algo após a falha no login
+                        }
                         break;
                     default:
-                        System.out.println("Escolha inválida! Por favor, escolha um número de 1 a 7.");
+                        System.out.println("Escolha inválida! Por favor, escolha um número de 1 a 4");
                         break;
                 }
-                System.out.println("Pressione 'Esc' para sair ou qualquer outra tecla para continuar...");
+
+                System.out.println("Pressione '0' para sair ou qualquer outra tecla para continuar...");
                 String tecla = scanner.next();
-                if (tecla.equalsIgnoreCase("Esc")) {
+                if (tecla.equalsIgnoreCase("0")) {
                     sair = true;
                 }
             }
-            scanner.close();
             connection.close();
+            scanner.close();
             System.out.println("Conexão com o banco de dados fechada.");
         } catch (SQLException e) {
             e.printStackTrace();
         }        
     }
 
-    public static boolean fazerLogin() {
-        try (Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Usuário: ");
-            String usuario = scanner.nextLine();
-            System.out.print("Senha: ");
-            String senha = scanner.nextLine();
+    public static Usuario fazerLogin(int tipoUsuario, Connection connection) 
+    {
+        Usuario user = null;
+        System.out.println("Bem-vindo! Por favor, faça login.\n");
+        System.out.print("Usuario: ");
+        String usuario = scanner.nextLine();
+        System.out.print("Senha: ");
+        String senha = scanner.nextLine();
 
-            // Verifique as credenciais do usuário e senha
-            // Neste exemplo, faremos uma verificação simples com valores fixos
-            String usuarioCorreto = "admin";
-            String senhaCorreta = "123456";
-
-            return usuario.equals(usuarioCorreto) && senha.equals(senhaCorreta);
+        switch (tipoUsuario) {
+            case 2:
+                try {
+                    MedicoController medicoController = new MedicoController(connection);
+                    user = medicoController.buscarMedicoPorUsuario(usuario);
+                } 
+                catch (Exception e) {
+                    // TODO: handle exception
+                }
+                break;
+            case 3:
+                try {
+                    RecepcionistaController recepcionistaController = new RecepcionistaController(connection);
+                    user = recepcionistaController.buscarPorUsuario(usuario);
+                }
+                catch (Exception e) {
+                    // TODO: handle exception
+                }
+                break;
+            case 4:
+                try {
+                    LaboratorioController laboratorioController = new LaboratorioController(connection);
+                    user = laboratorioController.buscarPorUsuario(usuario);
+                }
+                catch (Exception e) {
+                    // TODO: handle exception
+                }
+                break;
+            default:
+                break;
         }
+
+        if (user != null) {
+            String senhaCadastrada = user.getSenha();
+            if(senha.equals(senhaCadastrada)){
+                return user;
+            }
+            else{
+                System.out.print("Senha digitada nao confere.\n");
+            }
+        } 
+        System.out.print("Usuario não encontrado\n");
+        return null;
     }
 }

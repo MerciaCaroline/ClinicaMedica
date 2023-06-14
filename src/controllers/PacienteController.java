@@ -1,42 +1,60 @@
 package controllers;
 
+import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
+import dataaccess.ExameDAO;
 import dataaccess.PacienteDAO;
-import models.Consulta;
 import models.Exame;
-import models.Medico;
 import models.Paciente;
-import models.ResultadoExame;
 
 public class PacienteController {
-    private Paciente paciente;
-    private List<Consulta> consultas;
-    private List<ResultadoExame> resultadosExames;
     private PacienteDAO pacienteDAO;
+    private ExameDAO exameDAO;
+    private Scanner scanner;
 
-    public PacienteController() {
-        super();
-    }
-
-    public PacienteController(Paciente paciente) {
-        this.paciente = paciente;
-        this.consultas = new ArrayList<>();
-        this.resultadosExames = new ArrayList<>();
-        this.pacienteDAO = new PacienteDAO();
+    public PacienteController(Connection connection) {
+        this.pacienteDAO = new PacienteDAO(connection);
+        this.exameDAO = new ExameDAO(connection);
+        this.scanner = new Scanner(System.in);
     }
 
     // CRUD
-    public void cadastrarPaciente(Paciente paciente) throws SQLException{
+    public void cadastrarPaciente(String nome) throws SQLException
+    {
+        System.out.println("\n Digite a idade: ");
+        int idade = scanner.nextInt();
+
+        System.out.println("\n Digite o cpf: ");
+        String cpf = scanner.nextLine();
+
+        System.out.println("\n Digite o telefone: ");
+        String telefone = scanner.nextLine();
+
+        System.out.println("\n Digite o email: ");
+        String email = scanner.nextLine();
+
+        System.out.println("\n Digite o endereco: ");
+        String endereco = scanner.nextLine();
+
+        System.out.println("\n Exolha o sexo (M) - Masculino, (F) - Feminino: ");
+        String sexo = scanner.nextLine();
+        
+        System.out.println("\n Escolha um usuario: ");
+        String usuario = scanner.nextLine();
+
+        System.out.println("\n Escolha uma senha: ");
+        String senha = scanner.nextLine();
+
+
+        Paciente paciente = new Paciente(usuario, senha, nome, telefone, cpf, sexo.charAt(0), email, idade, endereco);
         pacienteDAO.criar(paciente);
     }
 
     public Paciente buscarPaciente(int id) throws SQLException{
-        return pacienteDAO.ler(id);
+        return pacienteDAO.buscarPorId(id);
     }
 
     public List<Paciente> buscarTodosPacientes() throws SQLException{
@@ -56,36 +74,23 @@ public class PacienteController {
     }
 
     // Outros métodos
-    public void marcarConsulta(Medico medico, Date data, Time horarioConsulta, String descricao) {
-        Consulta consulta = new Consulta(paciente, medico, data, horarioConsulta, descricao);
-        consultas.add(consulta);
+    public Exame solicitarExame(int exameId) throws SQLException {
+        return exameDAO.buscarPorId(exameId);
     }
 
-    public void receberResultadoExame(ResultadoExame resultadoExame) {
-        resultadosExames.add(resultadoExame);
+    public void setPacienteDAO(PacienteDAO pacienteDAO) {
+        this.pacienteDAO = pacienteDAO;
     }
 
-    public void cancelarConsulta(Consulta consulta) {
-        consultas.remove(consulta);
+    public PacienteDAO getPacienteDAO() {
+        return pacienteDAO;
     }
 
-    public List<Consulta> consultarConsultas() {
-        return consultas;
+    public void setExameDAO(ExameDAO exameDAO) {
+        this.exameDAO = exameDAO;
     }
 
-    public List<ResultadoExame> consultarResultadosExames() {
-        return resultadosExames;
-    }
-
-    public List<Exame> solicitarExames(List<String> tiposExame) {
-        List<Exame> examesSolicitados = new ArrayList<>();
-        // Lógica para solicitar exames ao médico ou laboratório
-        // Criação dos objetos Exame e adição na lista examesSolicitados
-        return examesSolicitados;
-    }
-
-    public void autorizarExamesOnline() {
-        // Lógica para autorizar que os resultados de exames sejam disponibilizados online
-        // Atualizar os atributos dos ResultadoExame correspondentes
+    public ExameDAO getExameDAO() {
+        return exameDAO;
     }
 }
