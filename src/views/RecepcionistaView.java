@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.sql.Time;
 import java.util.Scanner;
 
@@ -82,11 +82,11 @@ public class RecepcionistaView {
 
         System.out.println("Digite a data no formato yyyy-MM-dd: ");
         String dataString = scanner.next();
-        Date dataConsulta = formato.parse(dataString); 
+        Date dataConsulta = new Date(formato.parse(dataString).getTime()); 
 
         System.out.println("Digite a hora no formato HH:mm: ");
         String horaString = scanner.next();
-        Date format_hora = sdf.parse(horaString);
+        Date format_hora = new Date(sdf.parse(horaString).getTime());
         Time horaConsulta = new Time(format_hora.getTime());
 
         // Solicitar descrição da consulta

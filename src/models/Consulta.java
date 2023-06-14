@@ -1,6 +1,6 @@
 package models;
 
-import java.util.Date;
+import java.sql.Date;
 import java.sql.Time;
 
 public class Consulta {
@@ -8,7 +8,7 @@ public class Consulta {
     private Medico medico;
     private Date data;
     private Time hora;
-    private String observacao;
+    private String telefone;
     private int id;
 
     // Construtores
@@ -16,12 +16,12 @@ public class Consulta {
         super();
     }
 
-    public Consulta(Paciente paciente, Medico medico, Date dataConsulta, Time hora, String observacao) {
+    public Consulta(Paciente paciente, Medico medico, Date dataConsulta, Time hora, String telefone) {
         this.paciente = paciente;
         this.medico = medico;
         this.data = dataConsulta;
         this.hora = hora;
-        this.observacao = observacao;
+        this.telefone = telefone;
     }
 
     public Consulta(String nomePaciente, Date dataConsulta) {
@@ -70,11 +70,11 @@ public class Consulta {
         this.hora = hora;
     }
 
-    public String getObservacao() {
-        return observacao;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setObservacao(String observacao) {
-        this.observacao = observacao;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 }

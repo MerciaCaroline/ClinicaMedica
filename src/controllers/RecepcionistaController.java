@@ -116,4 +116,28 @@ public class RecepcionistaController {
     public Recepcionista buscarPorUsuario(String usuario) throws SQLException {
         return recepcionistaDAO.buscarPorUsuario(usuario);
     }
+
+    public void setMedicoDAO(MedicoDAO medicoDAO) {
+        this.medicoDAO = medicoDAO;
+    }
+
+    public void setPacienteDAO(PacienteDAO pacienteDAO) {
+        this.pacienteDAO = pacienteDAO;
+    }
+
+    public void setRecepcionistaDAO(RecepcionistaDAO recepcionistaDAO) {
+        this.recepcionistaDAO = recepcionistaDAO;
+    }
+
+    public RecepcionistaDAO getRecepcionistaDAO() {
+        return recepcionistaDAO;
+    }
+
+    public MedicoDAO getMedicoDAO() {
+        return medicoDAO;
+    }
+
+    public PacienteDAO getPacienteDAO() {
+        return pacienteDAO;
+    }
 }

@@ -15,7 +15,6 @@ import models.Paciente;
 
 public class MedicoController {
     public ExameController exameController;
-    public PacienteController pacienteController;
     private MedicoDAO medicoDAO;
     private HistoricoPacienteDAO historicoDAO;
     private Scanner scanner;
@@ -32,14 +31,12 @@ public class MedicoController {
     public MedicoController(Connection connection) {
         medicoDAO = new MedicoDAO(connection);
         exameController = new ExameController(connection);
-        pacienteController = new PacienteController(connection);
         historicoDAO = new HistoricoPacienteDAO(connection);
         this.scanner = new Scanner(System.in);
     }
 
     public MedicoController(Connection connection, Medico medico) {
         exameController = new ExameController(connection);
-        pacienteController = new PacienteController(connection);
         medicoDAO = new MedicoDAO(connection);
         historicoDAO = new HistoricoPacienteDAO(connection);
         this.scanner = new Scanner(System.in);
@@ -86,21 +83,45 @@ public class MedicoController {
         return medicoDAO.buscarPorUsuario(usuario);
     }
 
-    public void autorizarExameOnline() throws SQLException {
+    public String autorizarExameOnline() throws SQLException {
         System.out.println("Digite o código do exame: ");
         int codigoExame = scanner.nextInt();
 
         Exame exame = this.exameController.buscarExame(codigoExame);
 
         if(exame == null | exame.getMedico().getId() != this.medico.getId()){
-            System.out.println("Exame não encontrado.");
+            return "Exame não encontrado.";
         }
         else if(exame.isDisponivelOnline() | exameController.disponibilizarExameOnline(codigoExame))
         {
-            System.out.println("Exame autorizado para disponibilidade .");
+            return "Exame autorizado para disponibilidade .";
         }
         else{
-            System.out.println("Não foi possivel disponibilizar o exame");
+            return "Não foi possivel disponibilizar o exame";
         }
+    }
+
+    public void setHistoricoDAO(HistoricoPacienteDAO historicoDAO) {
+        this.historicoDAO = historicoDAO;
+    }
+
+    public HistoricoPacienteDAO getHistoricoDAO() {
+        return historicoDAO;
+    }
+
+    public void setMedicoDAO(MedicoDAO medicoDAO) {
+        this.medicoDAO = medicoDAO;
+    }
+
+    public MedicoDAO getMedicoDAO() {
+        return medicoDAO;
+    }
+
+    public void setScanner(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public Scanner getScanner() {
+        return scanner;
     }
 }

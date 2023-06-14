@@ -3,7 +3,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class PostgresDBConnection {
-    private static final String URL = "jdbc:postgresql://localhost:5432/clinica-medica";
+    private static final String URL = "jdbc:postgresql://localhost:5432/postgres";
     private static final String USER = "postgres";
     private static final String PASSWORD = "WedbGf3a6ZHF3NwdKzGy";
 

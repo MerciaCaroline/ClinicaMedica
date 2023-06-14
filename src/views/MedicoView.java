@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 // Pacote visão (View)
 
@@ -44,14 +45,14 @@ public class MedicoView {
     // Método para exibir o menu de opções do médico
     public void exibirMenuMedico() throws ParseException, SQLException {     
         System.out.println("Digite o nome do paciente que está em atendimento: ");
-        int teste = scanner.nextInt();
-        String nomePaciente = "Fulano de Tal";
+        String nomePaciente = scanner.nextLine();
+        //String nomePaciente = "Fulano de Tal";
         paciente = this.pacienteController.buscarPacientePorNome(nomePaciente);
 
         if(paciente == null){
             System.out.println("Paciente não encontrado!");
             System.out.println("Deseja cadastrá-lo? (S/N)");
-            String opcao = scanner.nextLine();
+            String opcao = scanner.next();
 
             switch (opcao.toUpperCase()) {
                 case "S":
@@ -78,11 +79,10 @@ public class MedicoView {
             System.out.println("5. Sair");
             System.out.println("Digite a opção desejada: ");
             opcao = scanner.nextInt();
-            scanner.nextLine();
             
             switch (opcao) {
                 case 1: //Autorizar exame online
-                    var exames = this.exameController.buscarTodosExames()
+                    List<Exame> exames = this.exameController.buscarTodosExames()
                         .stream().filter( p ->  
                             p.getMedico().getId() == this.medico.getId()
                             & p.isDisponivelOnline() == false 
@@ -96,16 +96,16 @@ public class MedicoView {
                         System.out.print(id + " | " + tipo +" | "+ dataSolicitacao +" | " + "\n");
                     }
 
-                    this.medicoController.autorizarExameOnline();
+                    System.out.println(this.medicoController.autorizarExameOnline());
                     break;
                 case 2: // Registrar historico Paciente              
                     System.out.println("Digite o histórico do paciente: ");
-                    String historicoPaciente = scanner.next();
+                    String historicoPaciente = scanner.nextLine();
 
                     medicoController.registrarHistoricoPaciente(paciente, historicoPaciente);
                     break;
                 case 3: // Consultar exames
-                    var examesPaciente = this.medicoController.consultarResultadosExames(medico, paciente);
+                    List<Exame> examesPaciente = this.medicoController.consultarResultadosExames(medico, paciente);
 
                     for (Exame ex : examesPaciente) {
                         int id = ex.getId();
@@ -117,13 +117,13 @@ public class MedicoView {
                     break;
                 case 4: // Solicitacao de exame                        
                     System.out.println("Em qual laboratorio deseja solicitar um exame? Digite a opção desejada: ");
-                    var laboratorios = this.laboratorioController.buscarTodos();
+                    List<Laboratorio> laboratorios = this.laboratorioController.buscarTodos();
                     for (Laboratorio laboratorio : laboratorios) {
                         int id = laboratorio.getId();
                         String nome = laboratorio.getNome();
                         System.out.print(id + " | " + nome+"\n");
                     }                        
-                    var laboratorio_id = scanner.nextInt();
+                    int laboratorio_id = scanner.nextInt();
                     Laboratorio laboratorioEscolhido = laboratorios
                         .stream()
                         .filter( p ->  
@@ -131,7 +131,7 @@ public class MedicoView {
                         .findFirst().get();
                                     
                     System.out.println("Digite o tipo de exame que deseja solicitar: ");
-                    String tipoExame = scanner.next();
+                    String tipoExame = scanner.nextLine();
 
                     this.exameController.solicitarExame(tipoExame, paciente, medico, laboratorioEscolhido);
                     break;

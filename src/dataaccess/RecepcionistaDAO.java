@@ -85,13 +85,13 @@ public class RecepcionistaDAO {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
         String strDate = dateFormat.format(consulta.getData());  
 
-        String query = "INSERT INTO consulta (id_paciente, id_medico, data_consulta, hora_consulta, observacao) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO consulta (id_paciente, id_medico, data_consulta, hora_consulta, telefone) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, consulta.getPaciente().getId());
             statement.setInt(2, consulta.getMedico().getId());
             statement.setString(3, strDate);
             statement.setTime(4, consulta.getHora());
-            statement.setString(5, consulta.getObservacao());
+            statement.setString(5, consulta.getTelefone());
             int rowsInserted = statement.executeUpdate();
             return rowsInserted > 0;
         }

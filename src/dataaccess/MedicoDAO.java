@@ -90,7 +90,7 @@ public class MedicoDAO {
         try (PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
-                var medico = criarMedico(resultSet);
+                Medico medico = criarMedico(resultSet);
                 medicos.add(medico);
             }
         }

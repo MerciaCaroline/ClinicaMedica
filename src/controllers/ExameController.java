@@ -37,7 +37,7 @@ public class ExameController {
     }
 
     public List<Exame> obterPendentesPorLaboratorio(Laboratorio laboratorio) throws SQLException{
-        var exames =  exameDAO.buscarPorLaboratorio(laboratorio.getId());
+        List<Exame> exames =  exameDAO.buscarPorLaboratorio(laboratorio.getId());
         return  exames.stream().filter(
             p ->  p.getResultado() == null)
         .collect(Collectors.toList());

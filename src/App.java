@@ -176,7 +176,7 @@ public class App {
         }
 
         if (user != null) {
-            var senhaCadastrada = user.getSenha();
+            String senhaCadastrada = user.getSenha();
             if(senha.equals(senhaCadastrada)){
                 return user;
             }
